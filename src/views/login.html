@@ -1,0 +1,30 @@
+{% extends 'layout.html'%}
+
+{% block title %}
+    <title>Login</title>
+{% endblock title %}
+
+{% block styles %}
+    <link rel="stylesheet" href="./styles/login.css">
+{% endblock styles %}
+
+{% block content %}
+<main>
+    <form action="/" method="POST">
+        <legend>
+            <h1>Faça login</h1>
+        </legend>
+
+        <div class="inputs">
+            <label for="email">E-mail</label>
+            <input type="text" name='email' required='required'>
+
+            <label for="password">Senha</label>
+            <input type="password" name='password' required='required' maxlength="20" placeholder="Máximo 20 caracteres">
+        </div>
+    </form>
+</main>
+{% endblock content %}
+
+{% block scripts %}
+{% endblock scripts %}

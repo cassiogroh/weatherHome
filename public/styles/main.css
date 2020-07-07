@@ -1,0 +1,133 @@
+:root {
+    --color1: #eeee9f;
+    --color2: #dbdb98;
+    --border-shadow: black;
+    --text-color: black;
+}
+
+* {
+    list-style: none;
+    text-decoration: none;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+
+body {
+    width: 80%;
+    max-width: 1100px;
+    height: 100vh;
+
+    margin: 0 auto;
+
+    background: linear-gradient(#ffffee, #ffffcc);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+h1, h2, h3, h4, h5, h6, p {
+    color: var(--text-color);
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--color1);
+    box-shadow: var(--border-shadow) 2px 2px 7px;
+    margin-top: 10px;
+    border-radius: 10px;
+}
+
+header .home a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 2px;
+}
+
+header .home a p {
+    margin: 10px;
+    color: black;
+    font-size: 20px;
+}
+
+header .home a p:hover {
+    font-weight: bold;
+}
+
+header .nav-bar>a {
+    padding: 15px;
+    color: black;
+    font-size: 20px;
+}
+
+header .nav-bar>a:hover {
+    font-weight: bold;
+}
+
+header .nav-bar a img {
+    transition: 400ms;
+}
+
+header .nav-bar a img:hover {
+    transform: scale(1.2);
+}
+/* Login modal */
+.hide {
+    display: none;
+}
+
+.login-modal {
+    position: absolute;
+    top: 80px;
+    right: 13rem;
+}
+
+.login-modal h1 {
+    margin: 50px;
+}
+
+.login-modal .inputs {
+    display: flex;
+    flex-direction: column;
+    width: 250px;
+
+    border: 3px black solid;
+    border-radius: 25px;
+    background: linear-gradient(var(--color1), var(--color2));
+    padding: 10px;
+}
+
+.login-modal .inputs label {
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.login-modal .inputs input {
+    padding-left: 20px;
+    height: 30px;
+    border: none;
+    border-radius: 5px;
+}
+
+.login-modal .inputs>input {
+    margin-bottom: 10px;
+}
+
+.login-modal button {
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    background: white;
+    width: fit-content;
+    padding: 5px;
+    margin-right: auto;
+    margin-left: auto;
+    font-weight: bold;
+    transition: 400ms;
+}
+
+.login-modal button:hover {
+    transform: scale(1.05);
+}

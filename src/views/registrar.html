@@ -1,0 +1,113 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    <title>Registrar</title>
+{% endblock title %}
+
+{% block styles %}
+    <link rel="stylesheet" href="../styles/registrar.css">
+{% endblock styles %}
+
+{% block content %}
+    <main>
+        <form action="/save-point" method="POST">
+            <fieldset>
+                <legend>
+                    <h1>Dados pessoais</h1>
+                </legend>
+
+                <div class="fieldgroup">
+                    <div class="field">
+                        <label for="name">Nome completo *</label>
+                        <input type="text" name='name' required='required'>
+                    </div>
+                </div>
+
+                <div class="fieldgroup">
+                    <div class="field">
+                        <label for="birthdate">Data de nascimento *</label>
+                        <input type="date" name='birthdate' required='required'>
+                    </div>
+
+                    <div class="field">
+                        <label for="email">E-mail *</label>
+                        <input type="email" name='email' required='required'>
+                    </div>
+                </div>
+
+                <div class="fieldgroup">
+                    <div class="field">
+                        <label for="password1">Senha *</label>
+                        <input type="password" name='password1' maxlength='20' required='required' placeholder='Máximo 20 caracteres'>
+                    </div>
+
+                    <div class="field">
+                        <label for="password2">Repita a senha *</label>
+                        <input type="password" name='password2' maxlength='20' required='required'>
+                    </div>
+                </div>
+
+                <div class="fieldgroup">
+                    <div class="field">
+                        <label for="address">Endereço *</label>
+                        <input type="text" name='address' required='required'>
+                    </div>
+
+                    <div class="field">
+                        <label for="address2">N° / Complemento</label>
+                        <input type="text" name='address2'>
+                    </div>
+                </div>
+
+                <div class="fieldgroup">
+                    <div class="field">
+                        <label for="state">Estado *</label>
+                        <select name='state'>
+                            <option value="0">Selecione o estado</option>
+                        </select>
+                    </div>
+
+                    <input class='stateName' type='hidden'>
+
+                    <div class="field">
+                        <label for="city">Cidade *</label>
+                        <select name='city' disabled='disabled'>
+                            <option value="0">Selecione a cidade</option>
+                        </select>
+                    </div>
+                </div>
+
+                <h6>* Campo obrigatório</h6>
+
+                </div>
+            </fieldset>
+
+            <div class="buttons">
+                <button type="reset">
+                    <h2>Limpar formulário</h2>
+                </button>
+
+                <button id='submit' type="submit">
+                    <h2>Registrar</h2>
+                </button>
+            </div>
+        </form>
+    </main>
+
+{% if saved %}
+    <div class="modal">
+        <h1>Registro feito com sucesso</h1>
+
+        <script>
+            setTimeout(() => {
+                window.location = "/"
+            }, 1)
+        </script>
+    </div>
+{% endif %}
+
+{% endblock content %}
+
+{% block scripts %}
+    <script src="./scripts/registrar.js"></script>
+{% endblock scripts %}

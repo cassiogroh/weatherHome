@@ -1,0 +1,1 @@
+Aplicativo feito para reunir e monitorar estações meteorológicas utilizando AJAX para conectar API's disponibilizados pelo website 'Weather Underground'

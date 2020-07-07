@@ -1,0 +1,29 @@
+<header>
+    <div class='home'>
+        <a href="/home">
+            <img src="../assets/logo.svg" alt="Logo">
+            <p>Home</p>
+        </a>
+    </div>
+
+    <div class='nav-bar'>
+        <a href="/registrar">Registrar</a>
+        <a href="#" class='login'>Login</a>
+        <a href="/parcerias">Parcerias</a>
+        <a href="#" class='darkmode'><img src="./assets/darkmode.svg" alt="Modo noturno"></a>
+    </div>
+
+    <div class="login-modal">
+        <form action="/login" method="POST" class='hide'>
+            <div class="inputs">
+                <label for="email">E-mail</label>
+                <input type="text" name='email' required='required'>
+
+                <label for="password">Senha</label>
+                <input type="password" name='password' required='required' maxlength="20" placeholder="Máximo 20 caracteres">
+
+                <button type="submit">Login</button>
+            </div>
+        </form>
+    </div>
+</header>

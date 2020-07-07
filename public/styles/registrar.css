@@ -1,0 +1,101 @@
+body {
+    height: 100%;
+}
+
+fieldset {
+    margin-top: 50px;
+    margin-bottom: 20px;
+    border: none;
+    border-radius: 25px;
+    background: linear-gradient(var(--color1), var(--color2));
+    padding: 30px;
+}
+
+fieldset legend {
+    text-align: center;
+    background-color: var(--color2);
+    border-radius: 10px;
+}
+
+fieldset legend h1 {
+    margin: 0;
+    padding: 10px;
+}
+
+fieldset h6 {
+    margin: 0;
+}
+
+.fieldgroup {
+    display: flex;
+}
+
+.fieldgroup .field {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.fieldgroup .field.field {
+    margin-left: 5px;
+    margin-bottom: 20px;
+}
+
+input, select {
+    padding-left: 20px;
+    height: 40px;
+    border: none;
+    border-radius: 5px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+form .buttons {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 15px;
+}
+
+form .buttons button {
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    background: linear-gradient(var(--color1), var(--color2));
+}
+
+form .buttons button + button {
+    margin-left: 5px;
+}
+
+form .buttons button h2 {
+    margin: 0;
+    padding: 5px;
+}
+
+/* Regras para input de senhas */
+.match {
+    outline-color: green;
+}
+
+.not-match {
+    outline-color: red;
+    color: red;
+}
+
+/* Modal após registro */
+.modal {
+    margin: 0;
+    height: 110%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.95);
+    position: absolute;
+}
+
+.modal h1 {
+    color: white;
+    text-align: center;
+    margin-top: 10%;
+}
