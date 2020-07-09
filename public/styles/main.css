@@ -3,6 +3,9 @@
     --color2: #dbdb98;
     --border-shadow: black;
     --text-color: black;
+    --bg-color1: #ffe;
+    --bg-color2: #ffc;
+    --input-color: white;
 }
 
 * {
@@ -19,14 +22,20 @@ body {
 
     margin: 0 auto;
 
-    background: linear-gradient(#ffffee, #ffffcc);
+    background: linear-gradient(var(--bg-color1), var(--bg-color2) );
     background-repeat: no-repeat;
     background-size: cover;
 }
 
-h1, h2, h3, h4, h5, h6, p {
+/* Dark mode */
+h1, h2, h3, h4, h5, h6, p, label {
     color: var(--text-color);
 }
+
+input, select {
+    background-color: var(--input-color);
+}
+/*           */
 
 header {
     display: flex;

@@ -67,7 +67,7 @@
                         </select>
                     </div>
 
-                    <input class='stateName' type='hidden'>
+                    <input class='stateName' name='stateName' type='hidden'>
 
                     <div class="field">
                         <label for="city">Cidade *</label>
@@ -94,17 +94,17 @@
         </form>
     </main>
 
-{% if saved %}
-    <div class="modal">
-        <h1>Registro feito com sucesso</h1>
+    {% if saved %}
+        <div class="modal">
+            <h1>Registro feito com sucesso</h1>
 
-        <script>
-            setTimeout(() => {
-                window.location = "/"
-            }, 1)
-        </script>
-    </div>
-{% endif %}
+            <script>
+                setTimeout(() => {
+                    window.location = "/"
+                }, 1)
+            </script>
+        </div>
+    {% endif %}
 
 {% endblock content %}
 

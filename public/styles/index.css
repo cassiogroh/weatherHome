@@ -23,3 +23,42 @@ body {
     font-weight: bold;
     color: black;
 }
+
+/* Página de usuário */
+
+form {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    width: 200px;
+    margin-bottom: 20px;
+}
+
+form .input {
+    display: flex;
+}
+
+form input {
+    padding-left: 5px;
+    height: 40px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border: 2px solid var(--border-shadow);
+    border-right: none;
+}
+
+form button {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border: 2px solid var(--border-shadow);
+    border-left: none;
+    width: 50px;
+    cursor: pointer;
+    background-color: #ddd;
+}
+
+form button img {
+    height: 30px;
+    margin: 0;
+    padding: 0;
+}
