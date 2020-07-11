@@ -5,7 +5,6 @@ const bcrypt = require('bcrypt-nodejs');
 const app = express();
 
 const info = require('./modules/weather-info');
-const { stationsId } = require('./modules/weather-info');
 
 nunjucks.configure('src/views', {
     express: app,
@@ -70,21 +69,27 @@ for (i = 0; i < length; i++) {
 app.get('/', (req, res) => {
     setTimeout(() => {
         res.render('index.html', {
-            stations: stations
+            stations: stations,
+            darkMode: 0
         })
     }, 4000);
 })
 
 // Carregar página inicial sem setTimeout quando clicar no botão home
 app.get('/home', (req, res) => {
+    let dark = req.query;
     res.render('index.html', {
-        stations: stations
+        stations: stations,
+        darkMode: dark.dark
     })
 })
 
 // Rota para página de registro
 app.get('/registrar', (req, res) => {
-    res.render('registrar.html')
+    let dark = req.query;
+    res.render('registrar.html', {
+        darkMode: dark.dark
+    })
 })
 
 app.post('/save-point', (req, res) => {
@@ -111,7 +116,11 @@ app.post('/save-point', (req, res) => {
                         stations: 'ISANTACA56'
                     })
                     .then(user => {
-                        res.render('registrar.html', { saved: true });
+                        let dark = req.query;
+                        res.render('registrar.html', {
+                            saved: true,
+                            darkMode: dark.dark
+                        });
                     })
             })
             .then(trx.commit)
@@ -160,9 +169,11 @@ app.post('/login', (req, res) => {
                     .then(user => {
                         fetchStations(user[0].name);
                         setTimeout(() => {
+                            let dark = req.query;
                             res.render('usuario.html', {
                                 userStations: userStations,
-                                user: user[0].name
+                                user: user[0].name,
+                                darkMode: dark.dark
                             })
                         }, 3000)
                     })
@@ -176,6 +187,7 @@ app.post('/login', (req, res) => {
 
 // Rota para adicionar novas estações
 app.post('/added', (req, res) => {
+    let dark = req.query;
     userStations = [];
     let stationID = req.body.stationID;
     const username = req.body.user;
@@ -192,17 +204,20 @@ app.post('/added', (req, res) => {
                     setTimeout(() => {
                         res.render('usuario.html', {
                             userStations: userStations,
-                            user: username
+                            user: username,
+                            darkMode: dark.dark
                         })
                     }, 3000)
                 })
         })
 })
 
-
 // Rota para parcerias
 app.get('/parcerias', (req, res) => {
-    res.render('parcerias.html');
+    let dark = req.query;
+    res.render('parcerias.html', {
+        darkMode: dark.dark
+    });
 });
 
 const PORT = 4000;

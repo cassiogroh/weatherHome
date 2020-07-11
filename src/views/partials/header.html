@@ -1,26 +1,27 @@
 <header>
     <div class='home'>
-        <a href="/home">
+        <a href="/home?dark={{darkMode}}" id='home'>
             <img src="../assets/logo.svg" alt="Logo">
             <p>Home</p>
         </a>
     </div>
 
     <div class='nav-bar'>
-        <a href="/registrar">Registrar</a>
+        <a href="/registrar?dark={{darkMode}}" id='registrar'>Registrar</a>
         <a href="#" class='login'>Login</a>
-        <a href="/parcerias">Parcerias</a>
+        <a href="/parcerias?dark={{darkMode}}" id='parcerias'>Parcerias</a>
         <a href="#" class='darkmode'><img src="./assets/darkmode.svg" alt="Modo noturno"></a>
+        <input type="hidden" value='{{darkMode}}' id='darkMode'>
     </div>
 
     <div class="login-modal">
-        <form action="/login" method="POST" class='hide'>
+        <form action="/login?dark={{darkMode}}" id='login' method="POST" class='hide'>
             <div class="inputs">
                 <label for="email">E-mail</label>
                 <input type="text" name='email' required='required'>
 
                 <label for="password">Senha</label>
-                <input type="password" name='password' required='required' maxlength="20" placeholder="Máximo 20 caracteres">
+                <input type="password" name='password' required='required' maxlength="20">
 
                 <button type="submit">Login</button>
             </div>

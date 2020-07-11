@@ -9,28 +9,30 @@
 {% endblock styles %}
 
 {% block content %}
-    <h1>Bem-vindo {{user}}!</h1>
+    <main>
+        <h1>Bem-vindo {{user}}!</h1>
 
-    <form action="/added" method='POST'>
-        <label for="stationID">Adicione um ID</label>
+        <form action="/added?dark={{darkMode}}" id='added' method='POST'>
+            <label for="stationID">Adicione um ID</label>
 
-        <div class="input">
-            <input type="text" name="stationID" placeholder='e.g. ISANTACA56'>
-            <button type="submit"><img src="./assets/+icon.png" alt="Adicionar"></button>
-        </div>
-
-        <input type="hidden" name="user" value="{{user}}">
-    </form>
-
-    <div class='grid-card'>
-        {% for station in userStations %}
-            <div class='card'>
-                <a href={{station.link}}>{{station.local}}</a>
-                <p>Temperatura: {{station.temp}} °C</p>
-                <p>Chuva acumulada: {{station.rain}} mm</p>
+            <div class="input">
+                <input type="text" name="stationID" placeholder='e.g. ISANTACA56'>
+                <button type="submit"><img src="./assets/+icon.png" alt="Adicionar"></button>
             </div>
-        {% endfor %}
-    </div>
+
+            <input type="hidden" name="user" value="{{user}}">
+        </form>
+
+        <div class='grid-card'>
+            {% for station in userStations %}
+                <div class='card'>
+                    <a href={{station.link}}>{{station.local}}</a>
+                    <p>Temperatura: {{station.temp}} °C</p>
+                    <p>Chuva acumulada: {{station.rain}} mm</p>
+                </div>
+            {% endfor %}
+        </div>
+    </main>
 {% endblock content %}
 
 {% block scripts %}

@@ -10,7 +10,7 @@
 
 {% block content %}
     <main>
-        <form action="/save-point" method="POST">
+        <form action="/save-point?dark={{darkMode}}" id='savepoint' method="POST">
             <fieldset>
                 <legend>
                     <h1>Dados pessoais</h1>
@@ -100,8 +100,8 @@
 
             <script>
                 setTimeout(() => {
-                    window.location = "/"
-                }, 1)
+                    window.location = "home?dark={{darkMode}}"
+                }, 2000)
             </script>
         </div>
     {% endif %}
