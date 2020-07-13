@@ -31,7 +31,7 @@ let userStations = [];
 let stations = [];
 let station = {};
 
-const request = async (i, j, url, ID) => {
+const request = async (i, j, url, dbData, firstTime) => {
     // i = número da estação dentro do loop
     // j = 0 ou 1, para diferenciar requisição da página inicial e do usuário
     // url = url da estação buscada
@@ -55,15 +55,21 @@ const request = async (i, j, url, ID) => {
                 station['est' + i].id = info.stationsId[i];
                 stations.push(station['est' + i]);
             } else {
-                station['est' + i].link = 'https://www.wunderground.com/dashboard/pws/' + ID;
-                station['est' + i].id = ID;
-                station['est' + i].name = local;
+                station['est' + i].link = 'https://www.wunderground.com/dashboard/pws/' + dbData.stations[i];
+                station['est' + i].id = dbData.stations[i];
+
+                if (firstTime) {
+                    station['est' + i].name = local;
+                } else {
+                    station['est' + i].name = dbData.stationname[i];
+                }
+
                 userStations.push(station['est' + i]);
             }
         })
         .catch(err => {
-            console.log('Estação offline');
-            // console.log(err);
+            // console.log('Estação offline');
+            console.log(err);
         }
         )
 }
@@ -122,18 +128,22 @@ app.post('/save-point', (req, res) => {
                         state: req.body.stateName,
                         city: req.body.city,
                         joined: new Date(),
-                        stations: ['ISANTACA56'],
-                        stationname: ['Rio Branco - Brusque']
+                        stations: ['ISANTACA85'],
+                        stationname: ['Bairro Centro - Brusque']
                     })
                     .then(user => {
                         let dark = req.query.dark;
                         fetchStations(req.body.name);
+                        
+                        setTimeout(() => {
                             res.render('usuario.html', {
                                 userStations: userStations,
                                 user: req.body.name,
                                 email: req.body.email,
                                 darkMode: dark
-                        });
+                            });
+                        }, 4000);
+
                         // res.render('/registrar', {
                         //     saved: true,
                         //     dark: dark
@@ -143,8 +153,8 @@ app.post('/save-point', (req, res) => {
             .then(trx.commit)
             .catch(trx.rollback)
     })
-        // .catch(err => res.status(400).json('E-mail already registered'));
-        .catch(console.log)
+        .catch(err => res.status(400).json('E-mail already registered'));
+    // .catch(console.log)
 }
 )
 
@@ -153,14 +163,16 @@ const fetchStations = async (user) => {
     let j = 0;
     await db('users')
         .where('name', '=', user)
-        .select('stations')
+        .select('*')
         .then(data => {
-            if (data[0].stations[0] == 'null') {
-                data[0].stations.shift();
-            }
-            for (i=0; i<data[0].stations.length; i++) {
+            for (i = 0; i < data[0].stations.length; i++) {
+                if (data[0].stations[i] == data[0].stationname[i]) {
+                    firstTime = true;
+                } else {
+                    firstTime = false;
+                }
                 let url = `https://api.weather.com/v2/pws/observations/current?stationId=${data[0].stations[i]}&format=json&units=${info.units}&apiKey=${info.apiKey}&numericPrecision=${info.numericPreicison}`;
-                request(i, j, url, data[0].stations[i]);
+                request(i, j, url, data[0], firstTime);
             }
         })
 }
@@ -209,16 +221,26 @@ app.post('/added', (req, res) => {
     let userEmail = req.body.email
 
     db('users')
-        .where('name', '=', username)
+        .where('email', '=', userEmail)
         .select('*')
         .then(data => {
-            data[0].stations.push(stationID);
-            data[0].stationname.push(stationID)
+            for (i = 0; i < data[0].stations.length; i++) {
+                if (data[0].stations[i] == stationID) {
+                    console.log('Estação já cadastrado');
+                    return [data[0].stations, data[0].stationname]
+                } else {
+                    data[0].stations.push(stationID);
+                    data[0].stationname.push(stationID);
+                    return [data[0].stations, data[0].stationname]
+                }
+            }
+        })
+        .then(newData => {
             db('users')
-                .where('name', '=', username)
+                .where('email', '=', userEmail)
                 .update({
-                    stations: data[0].stations,
-                    stationname: data[0].stationname
+                    stations: newData[0],
+                    stationname: newData[1]
                 })
                 .then(user => {
                     fetchStations(username);
@@ -242,24 +264,29 @@ app.get('/reload', (req, res) => {
     let username = req.query.user;
     let userEmail = req.query.email;
     db('users')
-    .where('name', '=', username)
-    .select('stations')
-    .then(data => {
-        for (i=0; i<data[0].stations.length; i++) {
-            if (stationDelete === data[0].stations[i]) {
-                data[0].stations.splice(i, 1);
-                return data[0].stations;
-            }
-        }
-    })
-    .then(newArray => {
-        db('users')
-        .where('name', '=', username)
-        .select('stations')
+        .where('email', '=', userEmail)
+        .select('*')
         .then(data => {
+            if (data[0].stations.length > 1) {
+            for (i = 0; i < data[0].stations.length; i++) {
+                if (stationDelete === data[0].stations[i]) {
+                    data[0].stations.splice(i, 1);
+                    data[0].stationname.splice(i, 1);
+                    return [data[0].stations, data[0].stationname];
+                }
+            }
+        } else {
+            console.log('Não foi possível deletar a estação');
+            return [data[0].stations, data[0].stationname];
+        }
+        })
+        .then(newArray => {
             db('users')
-                .where('name', '=', username)
-                .update({ stations: newArray })
+                .where('email', '=', userEmail)
+                .update({
+                    stations: newArray[0],
+                    stationname: newArray[1]
+                })
                 .then(user => {
                     fetchStations(username);
                     setTimeout(() => {
@@ -272,13 +299,75 @@ app.get('/reload', (req, res) => {
                     }, 4000)
                 })
         })
-    })
 })
 
 // Rota para renomear estações
 app.get('/renomear', (req, res) => {
     let dark = req.query.dark;
-    let userEmail = req.query.user;
+    let username = req.query.user;
+    let userEmail = req.query.email;
+    let renameStationName = req.query.stationName;
+    let renameStationID = req.query.stationID;
+
+    res.render('usuario.html', {
+        rename: true,
+        renameStationID: renameStationID,
+        renameStationName: renameStationName,
+        darkMode: dark,
+        user: username,
+        email: userEmail,
+        userStations: userStations
+    })
+})
+
+// Após renomear estação
+app.post('/rename', (req, res) => {
+    userStations = [];
+    let dark = req.body.dark;
+    let username = req.body.user;
+    let userEmail = req.body.email;
+    let renameStationName = req.query.renameStationName;
+    let renameStationID = req.query.renameStationID;
+    let newName = req.body.rename;
+
+    db('users')
+        .where('email', '=', userEmail)
+        .select('*')
+        .then(data => {
+            for (i = 0; i < data[0].stationname.length; i++) {
+                if (renameStationID == data[0].stations[i]) {
+                    data[0].stationname.splice(i, 1, newName);
+                    return data[0].stationname;
+                } else if (renameStationName == data[0].stationname[i]) {
+                    data[0].stationname.splice(i, 1, newName);
+                    return data[0].stationname;
+                }
+            }
+        })
+        .then(newArray => {
+            db('users')
+                .where('email', '=', userEmail)
+                .select('*')
+                .then(data => {
+                    db('users')
+                        .where('email', '=', userEmail)
+                        .update({
+                            stationname: newArray
+                        })
+                        .then(user => {
+                            fetchStations(username);
+                            setTimeout(() => {
+                                res.render('usuario.html', {
+                                    rename: false,
+                                    userStations: userStations,
+                                    user: username,
+                                    email: userEmail,
+                                    darkMode: dark
+                                })
+                            }, 4000)
+                        })
+                })
+        })
 })
 
 // Rota para exluir conta
@@ -286,29 +375,33 @@ app.get('/excluir-conta', (req, res) => {
     let dark = req.query.dark;
     let userEmail = req.query.user;
 
+    // tem certeza?
+    // se não: render 'usuario'
+    // se sim:
+
     db('users')
-    .where('email', '=', userEmail)
-    .del()
-    .then()
+        .where('email', '=', userEmail)
+        .del()
+        .then()
 
     db('login')
-    .where('email', '=', userEmail)
-    .del()
-    .then(user => {
-        stations = [];
-        station = {};
-        let j = 1;
-        for (i = 0; i < length; i++) {
-            let url = `https://api.weather.com/v2/pws/observations/current?stationId=${info.stationsId[i]}&format=json&units=${info.units}&apiKey=${info.apiKey}&numericPrecision=${info.numericPreicison}`;
-            request(i, j, url);
-        }
-        setTimeout(() => {
-            res.render('index.html', {
-                darkMode: dark,
-                stations: stations
-            })
-        }, 4000);
-    })
+        .where('email', '=', userEmail)
+        .del()
+        .then(user => {
+            stations = [];
+            station = {};
+            let j = 1;
+            for (i = 0; i < length; i++) {
+                let url = `https://api.weather.com/v2/pws/observations/current?stationId=${info.stationsId[i]}&format=json&units=${info.units}&apiKey=${info.apiKey}&numericPrecision=${info.numericPreicison}`;
+                request(i, j, url);
+            }
+            setTimeout(() => {
+                res.render('index.html', {
+                    darkMode: dark,
+                    stations: stations
+                })
+            }, 4000);
+        })
 
 })
 

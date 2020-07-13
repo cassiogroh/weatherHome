@@ -1,7 +1,7 @@
 {% extends 'layout.html' %}
 
 {% block title %}
-    <title>Login</title>
+    <title>Estações de {{user}}</title>
 {% endblock title %}
 
 {% block styles %}
@@ -15,34 +15,48 @@
             <a href='/excluir-conta?dark={{darkMode}}&user={{email}}'>Excluir conta</a>
         </div>
 
-        <form action="/added?dark={{darkMode}}" id='added' method='POST'>
-            <label for="stationID">Adicione um ID</label>
+        <div class="forms">
+            <form action="/added?dark={{darkMode}}" id='added' method='POST'>
+                <label for="stationID">Adicione um ID</label>
 
-            <div class="input">
-                <input type="text" name="stationID" placeholder='e.g. ISANTACA56'>
-                <button type="submit"><img src="./assets/+icon.png" alt="Adicionar"></button>
-            </div>
+                <div class="input">
+                    <input type="text" name="stationID" placeholder='e.g. ISANTACA56'>
+                    <button type="submit"><img src="./assets/+icon.png" alt="Adicionar"></button>
+                </div>
 
-            <input type="hidden" name="user" value="{{user}}">
-            <input type="hidden" name="email" value="{{email}}">
-        </form>
+                <input type="hidden" name="user" value="{{user}}">
+                <input type="hidden" name="email" value="{{email}}">
+            </form>
 
+            {% if rename %}
+                <form action="/rename?renameStationID={{renameStationID}}&renameStationName={{renameStationName}}" method='POST'>
+                    <label for="rename">Renomear estação</label>
+                    <div class="input">
+                        <input type="text" name='rename' placeholder='{{renameStationName}}'>
+                        <button type="submit"><img src="./assets/edit.svg" alt="Confirmar nome"></button>
+                    </div>
+
+                    <input type="hidden" name="user" value="{{user}}">
+                    <input type="hidden" name="email" value="{{email}}">
+                    <input type="hidden" name="dark" value="{{darkMode}}">
+                </form>
+            {% endif %}
+        </div>
         <div class='grid-card'>
             {% for station in userStations %}
                 <div class='card'>
                     <div class="cardhead">
-                        <a href={{station.link}}>{{station.local}}</a>
+                        <a href={{station.link}}>{{station.name}}</a>
                         <a href="/reload?dark={{darkMode}}&user={{user}}&email={{email}}&delete={{station.id}}"><img src="./assets/close.svg" alt="Deletar estação"></a>
                     </div>
                     <p>Temperatura: {{station.temp}} °C</p>
                     <p>Chuva acumulada: {{station.rain}} mm</p>
-                    <h4>
-                        <a href="/renomear?dark={{darkMode}}&station={{station.id}}"></a>
-                    </h4>
+                    <a href="/renomear?dark={{darkMode}}&stationID={{station.id}}&stationName={{station.name}}&email={{email}}&user={{user}}"><img src="./assets/edit.svg" alt="Renomear estação"></a>
                 </div>
             {% endfor %}
         </div>
     </main>
+
 {% endblock content %}
 
 {% block scripts %}
