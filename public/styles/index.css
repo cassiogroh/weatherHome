@@ -24,7 +24,25 @@ body {
     color: black;
 }
 
+.card a img {
+    width: 20px;
+}
+
 /* Página de usuário */
+
+.user-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.user-head a {
+    color: var(--text-color);
+}
+
+.user-head a:hover {
+    font-weight: bold;
+}
 
 form {
     display: flex;
@@ -61,4 +79,21 @@ form button img {
     height: 30px;
     margin: 0;
     padding: 0;
+}
+
+form button img:hover {
+    filter: brightness(105%);
+}
+
+.cardhead {
+    display: flex;
+    justify-content: space-between;
+}
+
+.cardhead a img:hover {
+    transform: scale(1.10);
+}
+
+.cardhead>a{
+    margin-left: auto;
 }

@@ -26,6 +26,7 @@ function darkmode() {
         darkParcerias.href = '/parcerias?dark=1';
         // darkSavepoint.action = '/save-point?dark=1';
         // darkAdded.action = '/added?dark=1';
+        // darkReload.href = '/reload?dark=1';
         
 
     style.setProperty('--color1', '#555');
@@ -44,6 +45,7 @@ function darkmode() {
         darkParcerias.href = '/parcerias?dark=0';
         // darkSavepoint.action = '/save-point?dark=0';
         // darkAdded.action = '/added?dark=0';
+        // darkReload.href = '/reload?dark=0';
         
 
         style.setProperty('--color1', '#eeee9f');
@@ -57,7 +59,6 @@ function darkmode() {
 }
 
 function darkmodeInit() {
-    console.log(darkMode);
     if (darkMode==1) {
     style.setProperty('--color1', '#555');
     style.setProperty('--color2', '#222');

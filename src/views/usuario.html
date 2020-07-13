@@ -10,7 +10,10 @@
 
 {% block content %}
     <main>
-        <h1>Bem-vindo {{user}}!</h1>
+        <div class="user-head">
+            <h1>Bem-vindo {{user}}!</h1>
+            <a href='/excluir-conta?dark={{darkMode}}&user={{email}}'>Excluir conta</a>
+        </div>
 
         <form action="/added?dark={{darkMode}}" id='added' method='POST'>
             <label for="stationID">Adicione um ID</label>
@@ -21,14 +24,21 @@
             </div>
 
             <input type="hidden" name="user" value="{{user}}">
+            <input type="hidden" name="email" value="{{email}}">
         </form>
 
         <div class='grid-card'>
             {% for station in userStations %}
                 <div class='card'>
-                    <a href={{station.link}}>{{station.local}}</a>
+                    <div class="cardhead">
+                        <a href={{station.link}}>{{station.local}}</a>
+                        <a href="/reload?dark={{darkMode}}&user={{user}}&email={{email}}&delete={{station.id}}"><img src="./assets/close.svg" alt="Deletar estação"></a>
+                    </div>
                     <p>Temperatura: {{station.temp}} °C</p>
                     <p>Chuva acumulada: {{station.rain}} mm</p>
+                    <h4>
+                        <a href="/renomear?dark={{darkMode}}&station={{station.id}}"></a>
+                    </h4>
                 </div>
             {% endfor %}
         </div>

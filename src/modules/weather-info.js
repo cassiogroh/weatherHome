@@ -25,12 +25,12 @@ module.exports = {
         'IBRUSQ14',
         'IBRUSQ12',
         'ISCGUABI2',
-        'IGUABIRU5',
-        'IGUABIRU6',
-        'ISCRIBEI2',
-        'ISCPRESI2',
-        'ISCVARGE2',
-        'ISCVARGE3'
+        // 'IGUABIRU5',
+        // 'IGUABIRU6',
+        // 'ISCRIBEI2',
+        // 'ISCPRESI2',
+        // 'ISCVARGE2',
+        // 'ISCVARGE3'
     ]
 }
 
