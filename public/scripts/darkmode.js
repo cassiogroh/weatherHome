@@ -1,81 +1,62 @@
 // Darkmode toggle
-const darkButton = document.querySelector('a[class=darkmode]');
-darkButton.addEventListener('click', darkmode)
-
-const darkHome = document.getElementById("home");
-const darkRegistrar = document.getElementById("registrar");
-const darkLogin = document.getElementById("login");
-const darkParcerias = document.getElementById("parcerias");
-const darkSavepoint = document.getElementById("savepoint");
-const darkAdded = document.getElementById("added");
-
-let darkMode = document.getElementById("darkMode").value;
 
 // 0 Sem darkmode
 // 1 Com darkmode
 
+// Se primeira vez no site: dark mode desativado
+if (document.cookie == "") {
+document.cookie = 'darkMode=0';
+}
+
+const darkButton = document.querySelector('a[class=darkmode]');
+darkButton.addEventListener('click', darkmode)
+
+let dark = document.cookie[9];
+
+const initialMode = {
+    color1: "#eeee9f",
+    color2: "#f1f1a5",
+    borderShadow: "black",
+    textColor: "black",
+    bgColor1: "#ffe",
+    bgColor2: "#ffc",
+    inputColor: "white"
+}
+
+const darkMode = {
+    color1: "#555",
+    color2: "#222",
+    borderShadow: "#888",
+    textColor: "#eee",
+    bgColor1: "#222",
+    bgColor2: "#000",
+    inputColor: "#aaa"
+}
+
 const style = document.documentElement.style;
 
+const setKey = key => "--" + key.replace(/([A-Z])/, "-$1").toLowerCase();
+
+const setProp = (colors) => {
+    Object.keys(colors).map(key => style.setProperty(setKey(key), colors[key]));
+}
+
 function darkmode() {
-    if (darkMode==0) {
-        darkMode = 1;
-        
-        darkHome.href = '/home?dark=1';
-        darkRegistrar.href = '/registrar?dark=1';
-        darkLogin.action = '/login?dark=1';
-        darkParcerias.href = '/parcerias?dark=1';
-        // darkSavepoint.action = '/save-point?dark=1';
-        // darkAdded.action = '/added?dark=1';
-        // darkReload.href = '/reload?dark=1';
-        
-
-    style.setProperty('--color1', '#555');
-    style.setProperty('--color2', '#222');
-    style.setProperty('--border-shadow', '#888');
-    style.setProperty('--text-color', '#eee');
-    style.setProperty('--bg-color1', '#222');
-    style.setProperty('--bg-color2', '#000');
-    style.setProperty('--input-color', '#aaa');
+    if (dark==0) {
+        document.cookie = 'darkMode=1';
+        dark = document.cookie[9];
+        setProp(darkMode);
     } else {
-        darkMode = 0;
-        
-        darkHome.href = '/home?dark=0';
-        darkRegistrar.href = '/registrar?dark=0';
-        darkLogin.action = '/login?dark=0';
-        darkParcerias.href = '/parcerias?dark=0';
-        // darkSavepoint.action = '/save-point?dark=0';
-        // darkAdded.action = '/added?dark=0';
-        // darkReload.href = '/reload?dark=0';
-        
-
-        style.setProperty('--color1', '#eeee9f');
-        style.setProperty('--color2', '#f1f1a5');
-        style.setProperty('--border-shadow', 'black');
-        style.setProperty('--text-color', 'black');
-        style.setProperty('--bg-color1', '#ffe');
-        style.setProperty('--bg-color2', '#ffc');
-        style.setProperty('--input-color', 'white');
+        document.cookie = 'darkMode=0';
+        dark = document.cookie[9];
+        setProp(initialMode)
     }
 }
 
 function darkmodeInit() {
-    if (darkMode==1) {
-    style.setProperty('--color1', '#555');
-    style.setProperty('--color2', '#222');
-    style.setProperty('--border-shadow', '#888');
-    style.setProperty('--text-color', '#eee');
-    style.setProperty('--bg-color1', '#222');
-    style.setProperty('--bg-color2', '#000');
-    style.setProperty('--input-color', '#aaa');
-    } else {
-        style.setProperty('--color1', '#eeee9f');
-        style.setProperty('--color2', '#f1f1a5');
-        style.setProperty('--border-shadow', 'black');
-        style.setProperty('--text-color', 'black');
-        style.setProperty('--bg-color1', '#ffe');
-        style.setProperty('--bg-color2', '#ffc');
-        style.setProperty('--input-color', 'white');
-    }
+    if (dark==1) {
+        setProp(darkMode);
+    } 
 }
 
 darkmodeInit();

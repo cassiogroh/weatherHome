@@ -10,7 +10,7 @@
 // IGUABIRU5  - Guabiruba - Lageado Alto
 // IGUABIRU6  - Guabiruba - Planície Alta
 // ISCRIBEI2  - Botuverá - Ourinhos
-// ISCPRESI2  - Presidente Nereu - Tirivas
+// IPRESI11   - Presidente Nereu - Tirivas
 // ISCVARGE2  - Vidal Ramos - Faz. Rio Bonito 1
 // ISCPRESI3  - Vidal Ramos - Faz. Rio Bonito 2
 
@@ -25,12 +25,12 @@ module.exports = {
         'IBRUSQ14',
         'IBRUSQ12',
         'ISCGUABI2',
-        // 'IGUABIRU5',
-        // 'IGUABIRU6',
-        // 'ISCRIBEI2',
-        // 'ISCPRESI2',
-        // 'ISCVARGE2',
-        // 'ISCVARGE3'
+        'IGUABIRU5',
+        'IGUABIRU6',
+        'ISCRIBEI2',
+        'IPRESI11',
+        'ISCVARGE2',
+        'ISCVARGE3'
     ]
 }
 

@@ -30,6 +30,7 @@ const length = info.stationsId.length;
 let userStations = [];
 let stations = [];
 let station = {};
+let erro = false;
 
 const request = async (i, j, url, dbData, firstTime) => {
     // i = número da estação dentro do loop
@@ -68,8 +69,8 @@ const request = async (i, j, url, dbData, firstTime) => {
             }
         })
         .catch(err => {
-            // console.log('Estação offline');
-            console.log(err);
+            console.log('Estação offline');
+            // console.log(err);
         }
         )
 }
@@ -84,30 +85,25 @@ app.get('/', (req, res) => {
     }
     setTimeout(() => {
         res.render('index.html', {
-            stations: stations,
-            darkMode: 0
+            stations: stations
         })
     }, 4000);
 })
 
 // Carregar página inicial sem setTimeout quando clicar no botão home
 app.get('/home', (req, res) => {
-    let dark = req.query.dark;
     res.render('index.html', {
-        stations: stations,
-        darkMode: dark
+        stations: stations
     })
 })
 
 // Rota para página de registro
 app.get('/registrar', (req, res) => {
-    let dark = req.query.dark;
-    res.render('registrar.html', {
-        darkMode: dark
-    })
+    res.render('registrar.html');
 })
 
 app.post('/save-point', (req, res) => {
+    const erro = 1;
     const hash = bcrypt.hashSync(req.body.password1);
     db.transaction(trx => {
         trx.insert({
@@ -132,29 +128,28 @@ app.post('/save-point', (req, res) => {
                         stationname: ['Bairro Centro - Brusque']
                     })
                     .then(user => {
-                        let dark = req.query.dark;
                         fetchStations(req.body.name);
                         
                         setTimeout(() => {
                             res.render('usuario.html', {
                                 userStations: userStations,
                                 user: req.body.name,
-                                email: req.body.email,
-                                darkMode: dark
+                                email: req.body.email
                             });
                         }, 4000);
 
                         // res.render('/registrar', {
-                        //     saved: true,
-                        //     dark: dark
+                        //     saved: true
                         // })
                     })
             })
             .then(trx.commit)
             .catch(trx.rollback)
     })
-        .catch(err => res.status(400).json('E-mail already registered'));
-    // .catch(console.log)
+    // .catch(err => res.status(400).json('E-mail already registered'));
+    .catch(err => res.render('registrar.html', {
+        erro: true
+    }));
 }
 )
 
@@ -182,9 +177,6 @@ app.post('/login', (req, res) => {
     const loginEmail = req.body.email;
     const loginPassword = req.body.password;
 
-    if (!loginEmail || !loginPassword) {
-        return res.status(400).json('Incorrect form submit');
-    }
     db.select('email', 'hash').from('login')
         .where('email', '=', loginEmail)
         .then(data => {
@@ -195,12 +187,10 @@ app.post('/login', (req, res) => {
                     .then(user => {
                         fetchStations(user[0].name);
                         setTimeout(() => {
-                            let dark = req.query.dark;
                             res.render('usuario.html', {
                                 userStations: userStations,
                                 user: user[0].name,
-                                email: user[0].email,
-                                darkMode: dark
+                                email: user[0].email
                             })
                         }, 4000)
                     })
@@ -214,8 +204,6 @@ app.post('/login', (req, res) => {
 
 // Rota para adicionar novas estações
 app.post('/added', (req, res) => {
-    let dark = req.query.dark;
-    userStations = [];
     let stationID = req.body.stationID;
     let username = req.body.user;
     let userEmail = req.body.email
@@ -226,17 +214,26 @@ app.post('/added', (req, res) => {
         .then(data => {
             for (i = 0; i < data[0].stations.length; i++) {
                 if (data[0].stations[i] == stationID) {
-                    console.log('Estação já cadastrado');
-                    return [data[0].stations, data[0].stationname]
-                } else {
-                    data[0].stations.push(stationID);
-                    data[0].stationname.push(stationID);
-                    return [data[0].stations, data[0].stationname]
+                        res.render('usuario.html', {
+                            userStations: userStations,
+                            user: username,
+                            email: userEmail,
+                            erro: true
+                        })
+                    erro = true;
+                    break
                 }
+            }
+            if (!erro) {
+                userStations = [];
+                data[0].stations.push(stationID);
+                data[0].stationname.push(stationID);
+                return [data[0].stations, data[0].stationname]
             }
         })
         .then(newData => {
-            db('users')
+            if (!erro) {
+                db('users')
                 .where('email', '=', userEmail)
                 .update({
                     stations: newData[0],
@@ -248,18 +245,17 @@ app.post('/added', (req, res) => {
                         res.render('usuario.html', {
                             userStations: userStations,
                             user: username,
-                            email: userEmail,
-                            darkMode: dark
+                            email: userEmail
                         })
                     }, 4000)
                 })
+            }
+            erro = false;
         })
 })
 
 // Rota para excluir estações
 app.get('/reload', (req, res) => {
-    userStations = [];
-    let dark = req.query.dark;
     let stationDelete = req.query.delete;
     let username = req.query.user;
     let userEmail = req.query.email;
@@ -276,11 +272,18 @@ app.get('/reload', (req, res) => {
                 }
             }
         } else {
-            console.log('Não foi possível deletar a estação');
-            return [data[0].stations, data[0].stationname];
+                res.render('usuario.html', {
+                    userStations: userStations,
+                    user: username,
+                    email: userEmail,
+                    erro1: true
+                })
+            erro = true;
         }
         })
         .then(newArray => {
+            if (!erro) {
+            userStations = [];
             db('users')
                 .where('email', '=', userEmail)
                 .update({
@@ -293,17 +296,17 @@ app.get('/reload', (req, res) => {
                         res.render('usuario.html', {
                             userStations: userStations,
                             user: username,
-                            email: userEmail,
-                            darkMode: dark
+                            email: userEmail
                         })
                     }, 4000)
                 })
+            }
+            erro = false;
         })
 })
 
 // Rota para renomear estações
 app.get('/renomear', (req, res) => {
-    let dark = req.query.dark;
     let username = req.query.user;
     let userEmail = req.query.email;
     let renameStationName = req.query.stationName;
@@ -313,7 +316,6 @@ app.get('/renomear', (req, res) => {
         rename: true,
         renameStationID: renameStationID,
         renameStationName: renameStationName,
-        darkMode: dark,
         user: username,
         email: userEmail,
         userStations: userStations
@@ -323,7 +325,6 @@ app.get('/renomear', (req, res) => {
 // Após renomear estação
 app.post('/rename', (req, res) => {
     userStations = [];
-    let dark = req.body.dark;
     let username = req.body.user;
     let userEmail = req.body.email;
     let renameStationName = req.query.renameStationName;
@@ -361,8 +362,7 @@ app.post('/rename', (req, res) => {
                                     rename: false,
                                     userStations: userStations,
                                     user: username,
-                                    email: userEmail,
-                                    darkMode: dark
+                                    email: userEmail
                                 })
                             }, 4000)
                         })
@@ -372,7 +372,6 @@ app.post('/rename', (req, res) => {
 
 // Rota para exluir conta
 app.get('/excluir-conta', (req, res) => {
-    let dark = req.query.dark;
     let userEmail = req.query.user;
 
     // tem certeza?
@@ -397,7 +396,6 @@ app.get('/excluir-conta', (req, res) => {
             }
             setTimeout(() => {
                 res.render('index.html', {
-                    darkMode: dark,
                     stations: stations
                 })
             }, 4000);
@@ -407,10 +405,7 @@ app.get('/excluir-conta', (req, res) => {
 
 // Rota para parcerias
 app.get('/parcerias', (req, res) => {
-    let dark = req.query.dark;
-    res.render('parcerias.html', {
-        darkMode: dark
-    });
+    res.render('parcerias.html');
 });
 
 

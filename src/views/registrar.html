@@ -10,7 +10,7 @@
 
 {% block content %}
     <main>
-        <form action="/save-point?dark={{darkMode}}" id='savepoint' method="POST">
+        <form action="/save-point" id='savepoint' method="POST">
             <fieldset>
                 <legend>
                     <h1>Dados pessoais</h1>
@@ -94,13 +94,21 @@
         </form>
     </main>
 
+    {% if erro %}
+        <script>
+            setTimeout(() => {
+                alert('E-mail já cadastrado!')
+            }, 500)
+        </script>
+    {% endif %}
+
     {% if saved %}
         <div class="modal">
             <h1>Registro feito com sucesso</h1>
 
             <script>
                 setTimeout(() => {
-                    window.location = "home?dark={{darkMode}}"
+                    window.location = "/home"
                 }, 2000)
             </script>
         </div>

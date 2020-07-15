@@ -7,7 +7,6 @@ main.addEventListener('click', toggleModalOff);
 
 function toggleModal() {
     loginModal.classList.toggle('hide');
-    
 }
 
 function toggleModalOff() {

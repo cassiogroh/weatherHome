@@ -12,11 +12,11 @@
     <main>
         <div class="user-head">
             <h1>Bem-vindo {{user}}!</h1>
-            <a href='/excluir-conta?dark={{darkMode}}&user={{email}}'>Excluir conta</a>
+            <a href='/excluir-conta?user={{email}}'>Excluir conta</a>
         </div>
 
         <div class="forms">
-            <form action="/added?dark={{darkMode}}" id='added' method='POST'>
+            <form action="/added" id='added' method='POST'>
                 <label for="stationID">Adicione um ID</label>
 
                 <div class="input">
@@ -38,7 +38,6 @@
 
                     <input type="hidden" name="user" value="{{user}}">
                     <input type="hidden" name="email" value="{{email}}">
-                    <input type="hidden" name="dark" value="{{darkMode}}">
                 </form>
             {% endif %}
         </div>
@@ -47,16 +46,31 @@
                 <div class='card'>
                     <div class="cardhead">
                         <a href={{station.link}}>{{station.name}}</a>
-                        <a href="/reload?dark={{darkMode}}&user={{user}}&email={{email}}&delete={{station.id}}"><img src="./assets/close.svg" alt="Deletar estação"></a>
+                        <a href="/reload?user={{user}}&email={{email}}&delete={{station.id}}"><img src="./assets/close.svg" alt="Deletar estação"></a>
                     </div>
                     <p>Temperatura: {{station.temp}} °C</p>
                     <p>Chuva acumulada: {{station.rain}} mm</p>
-                    <a href="/renomear?dark={{darkMode}}&stationID={{station.id}}&stationName={{station.name}}&email={{email}}&user={{user}}"><img src="./assets/edit.svg" alt="Renomear estação"></a>
+                    <a href="/renomear?stationID={{station.id}}&stationName={{station.name}}&email={{email}}&user={{user}}"><img src="./assets/edit.svg" alt="Renomear estação"></a>
                 </div>
             {% endfor %}
         </div>
     </main>
 
+    {% if erro %}
+        <script>
+            setTimeout(() => {
+                alert('Esta estação já faz parte da sua coleção')
+            }, 500)
+        </script>
+    {% endif %}
+
+    {% if erro1 %}
+        <script>
+            setTimeout(() => {
+                alert('Não é possível excluir sua última estação')
+            }, 500)
+        </script>
+    {% endif %}
 {% endblock content %}
 
 {% block scripts %}
