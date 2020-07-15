@@ -22,6 +22,30 @@
             {% endfor %}
         </div>
     </main>
+
+    {% if erro_user %}
+        <script>
+            setTimeout(() => {
+                alert('Usuário não cadastrado')
+            }, 500)
+        </script>
+    {% endif %}
+
+    {% if erro_password %}
+        <script>
+            setTimeout(() => {
+                alert('Senha incorreta')
+            }, 500)
+        </script>
+    {% endif %}
+
+    {% if erro_username %}
+        <script>
+            setTimeout(() => {
+                alert('Usuário não cadastrado')
+            }, 500)
+        </script>
+    {% endif %}
 {% endblock content %}
 
 {% block scripts %}

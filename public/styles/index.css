@@ -104,18 +104,30 @@ form button img:hover {
 }
 
 .cardhead>a{
+    /* transform: translate(-25px); */
     margin-left: auto;
+    text-align: center;
 }
 
 .cardhead>a:hover{
     transform: scale(1.05);
 }
 
-.card a img {
+.card .bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card .bottom a img {
     display: flex;
     margin-left: auto;
 }
 
-.card a img:hover {
+.card .bottom a img:hover {
     transform: scale(1.10);
+}
+
+.card .bottom h6 {
+    margin:0;
 }

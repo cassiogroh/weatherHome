@@ -32,11 +32,12 @@ let stations = [];
 let station = {};
 let erro = false;
 
-const request = async (i, j, url, dbData, firstTime) => {
+const request = async (i, userReq, url, dbData, firstTime) => {
     // i = número da estação dentro do loop
-    // j = 0 ou 1, para diferenciar requisição da página inicial e do usuário
+    // userReq = diferencia requisição da página inicial e do usuário para exibição das estações
     // url = url da estação buscada
-    // ID = ID da estação buscada
+    // dbData = Estações do banco de dados, para ID e nome
+    // firstTime - Usado para identificar se o nome da estação foi alguma vez alterado, se false, usa o nome default (local)
     await fetch(url)
         .then(async res => await res.json())
         .then(async res => {
@@ -51,7 +52,7 @@ const request = async (i, j, url, dbData, firstTime) => {
             station['est' + i].temp = temp;
             station['est' + i].rain = rain;
 
-            if (j == 1) {
+            if (userReq == false) {
                 station['est' + i].link = 'https://www.wunderground.com/dashboard/pws/' + info.stationsId[i];
                 station['est' + i].id = info.stationsId[i];
                 stations.push(station['est' + i]);
@@ -70,6 +71,7 @@ const request = async (i, j, url, dbData, firstTime) => {
         })
         .catch(err => {
             console.log('Estação offline');
+            // erro_invalid_station = true;
             // console.log(err);
         }
         )
@@ -78,10 +80,10 @@ const request = async (i, j, url, dbData, firstTime) => {
 app.get('/', (req, res) => {
     stations = [];
     station = {};
-    let j = 1;
+    let userReq = false;
     for (i = 0; i < length; i++) {
         let url = `https://api.weather.com/v2/pws/observations/current?stationId=${info.stationsId[i]}&format=json&units=${info.units}&apiKey=${info.apiKey}&numericPrecision=${info.numericPreicison}`;
-        request(i, j, url);
+        request(i, userReq, url);
     }
     setTimeout(() => {
         res.render('index.html', {
@@ -103,7 +105,6 @@ app.get('/registrar', (req, res) => {
 })
 
 app.post('/save-point', (req, res) => {
-    const erro = 1;
     const hash = bcrypt.hashSync(req.body.password1);
     db.transaction(trx => {
         trx.insert({
@@ -129,7 +130,6 @@ app.post('/save-point', (req, res) => {
                     })
                     .then(user => {
                         fetchStations(req.body.name);
-                        
                         setTimeout(() => {
                             res.render('usuario.html', {
                                 userStations: userStations,
@@ -155,7 +155,7 @@ app.post('/save-point', (req, res) => {
 
 // Função para buscar as estações do usuário para rotas /login e /added
 const fetchStations = async (user) => {
-    let j = 0;
+    let userReq = true;
     await db('users')
         .where('name', '=', user)
         .select('*')
@@ -167,10 +167,11 @@ const fetchStations = async (user) => {
                     firstTime = false;
                 }
                 let url = `https://api.weather.com/v2/pws/observations/current?stationId=${data[0].stations[i]}&format=json&units=${info.units}&apiKey=${info.apiKey}&numericPrecision=${info.numericPreicison}`;
-                request(i, j, url, data[0], firstTime);
+                request(i, userReq, url, data[0], firstTime);
             }
         })
 }
+
 // Rota para login
 app.post('/login', (req, res) => {
     userStations = [];
@@ -194,12 +195,28 @@ app.post('/login', (req, res) => {
                             })
                         }, 4000)
                     })
-                    .catch(err => res.status(400).json('Unable to get user'));
+                    // .catch(err => res.status(400).json('Unable to get user'));
+                    .catch(err => {
+                        res.render('index.html', {
+                            stations: stations,
+                            erro_user: true
+                        })
+                    })
             } else {
-                res.status(400).json('Wrong credentials');
+                // res.status(400).json('Wrong credentials');
+                res.render('index.html', {
+                    stations: stations,
+                    erro_password: true
+                })
             }
         })
-        .catch(err => res.status(400).json('Wrong credentials'));
+        // .catch(err => res.status(400).json('Wrong credentials'));
+        .catch(err => {
+            res.render('index.html', {
+                stations: stations,
+                erro_username: true
+            })
+        })
 })
 
 // Rota para adicionar novas estações
@@ -208,20 +225,32 @@ app.post('/added', (req, res) => {
     let username = req.body.user;
     let userEmail = req.body.email
 
+    if (stationID == "") {
+        res.render('usuario.html', {
+            userStations: userStations,
+            user: username,
+            email: userEmail,
+            erro_add_invalid: true
+        })
+        erro = true;
+    }
+
     db('users')
         .where('email', '=', userEmail)
         .select('*')
         .then(data => {
-            for (i = 0; i < data[0].stations.length; i++) {
-                if (data[0].stations[i] == stationID) {
-                        res.render('usuario.html', {
-                            userStations: userStations,
-                            user: username,
-                            email: userEmail,
-                            erro: true
-                        })
-                    erro = true;
-                    break
+            if (!erro) {
+                for (i = 0; i < data[0].stations.length; i++) {
+                    if (data[0].stations[i] == stationID) {
+                            res.render('usuario.html', {
+                                userStations: userStations,
+                                user: username,
+                                email: userEmail,
+                                erro_add: true
+                            })
+                        erro = true;
+                        break
+                    }
                 }
             }
             if (!erro) {
@@ -242,12 +271,16 @@ app.post('/added', (req, res) => {
                 .then(user => {
                     fetchStations(username);
                     setTimeout(() => {
-                        res.render('usuario.html', {
-                            userStations: userStations,
-                            user: username,
-                            email: userEmail
-                        })
+                        // if (!erro_invalid_station) {
+                            res.render('usuario.html', {
+                                userStations: userStations,
+                                user: username,
+                                email: userEmail,
+                                // erro_invalid_station: true
+                            })
+                        // }
                     }, 4000)
+                    
                 })
             }
             erro = false;
@@ -276,7 +309,7 @@ app.get('/reload', (req, res) => {
                     userStations: userStations,
                     user: username,
                     email: userEmail,
-                    erro1: true
+                    erro_delete: true
                 })
             erro = true;
         }
@@ -324,7 +357,6 @@ app.get('/renomear', (req, res) => {
 
 // Após renomear estação
 app.post('/rename', (req, res) => {
-    userStations = [];
     let username = req.body.user;
     let userEmail = req.body.email;
     let renameStationName = req.query.renameStationName;
@@ -335,18 +367,37 @@ app.post('/rename', (req, res) => {
         .where('email', '=', userEmail)
         .select('*')
         .then(data => {
-            for (i = 0; i < data[0].stationname.length; i++) {
-                if (renameStationID == data[0].stations[i]) {
-                    data[0].stationname.splice(i, 1, newName);
-                    return data[0].stationname;
-                } else if (renameStationName == data[0].stationname[i]) {
-                    data[0].stationname.splice(i, 1, newName);
-                    return data[0].stationname;
+            for (i=0; i < data[0].stationname.length; i++) {
+                data[0].stationname[i];
+                if (newName == data[0].stationname[i]) {
+                    res.render('usuario.html', {
+                        userStations: userStations,
+                        user: username,
+                        email: userEmail,
+                        erro_rename: true
+                    })
+                    erro = true;
+                    break
+                }
+            }
+
+            if (!erro) {
+                console.log('treta')
+                for (i = 0; i < data[0].stationname.length; i++) {
+                    if (renameStationID == data[0].stations[i]) {
+                        data[0].stationname.splice(i, 1, newName);
+                        return data[0].stationname;
+                    } else if (renameStationName == data[0].stationname[i]) {
+                        data[0].stationname.splice(i, 1, newName);
+                        return data[0].stationname;
+                    } 
                 }
             }
         })
         .then(newArray => {
-            db('users')
+            userStations = [];
+            if (!erro) {
+                db('users')
                 .where('email', '=', userEmail)
                 .select('*')
                 .then(data => {
@@ -359,7 +410,6 @@ app.post('/rename', (req, res) => {
                             fetchStations(username);
                             setTimeout(() => {
                                 res.render('usuario.html', {
-                                    rename: false,
                                     userStations: userStations,
                                     user: username,
                                     email: userEmail
@@ -367,6 +417,8 @@ app.post('/rename', (req, res) => {
                             }, 4000)
                         })
                 })
+            }
+            erro = false;
         })
 })
 
@@ -389,10 +441,10 @@ app.get('/excluir-conta', (req, res) => {
         .then(user => {
             stations = [];
             station = {};
-            let j = 1;
+            let userReq = false;
             for (i = 0; i < length; i++) {
                 let url = `https://api.weather.com/v2/pws/observations/current?stationId=${info.stationsId[i]}&format=json&units=${info.units}&apiKey=${info.apiKey}&numericPrecision=${info.numericPreicison}`;
-                request(i, j, url);
+                request(i, userReq, url);
             }
             setTimeout(() => {
                 res.render('index.html', {

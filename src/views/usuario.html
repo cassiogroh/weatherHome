@@ -50,13 +50,16 @@
                     </div>
                     <p>Temperatura: {{station.temp}} °C</p>
                     <p>Chuva acumulada: {{station.rain}} mm</p>
-                    <a href="/renomear?stationID={{station.id}}&stationName={{station.name}}&email={{email}}&user={{user}}"><img src="./assets/edit.svg" alt="Renomear estação"></a>
+                    <div class="bottom">
+                        <h6>{{station.id}}</h6>
+                        <a href="/renomear?stationID={{station.id}}&stationName={{station.name}}&email={{email}}&user={{user}}"><img src="./assets/edit.svg" alt="Renomear estação"></a>
+                    </div>
                 </div>
             {% endfor %}
         </div>
     </main>
 
-    {% if erro %}
+    {% if erro_add %}
         <script>
             setTimeout(() => {
                 alert('Esta estação já faz parte da sua coleção')
@@ -64,10 +67,34 @@
         </script>
     {% endif %}
 
-    {% if erro1 %}
+    {% if erro_add_invalid %}
+        <script>
+            setTimeout(() => {
+                alert('Por favor, insira um ID válido')
+            }, 500)
+        </script>
+    {% endif %}
+
+    {% if erro_invalid_station %}
+        <script>
+            setTimeout(() => {
+                alert('ID inválido ou estação está offline')
+            }, 500)
+        </script>
+    {% endif %}
+
+    {% if erro_delete %}
         <script>
             setTimeout(() => {
                 alert('Não é possível excluir sua última estação')
+            }, 500)
+        </script>
+    {% endif %}
+
+    {% if erro_rename %}
+        <script>
+            setTimeout(() => {
+                alert('Já existe uma estação com este nome')
             }, 500)
         </script>
     {% endif %}
