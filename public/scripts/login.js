@@ -12,3 +12,12 @@ function toggleModal() {
 function toggleModalOff() {
     loginModal.classList.add('hide')
 }
+
+// Login modal
+// const loginSubmit  =document.querySelector('#loginSucceful');
+// loginSubmit.addEventListener('click', activateModal)
+
+// const loginSucceful = document.querySelector('#afterLogIn');
+// function activateModal() {
+//     loginSucceful.classList.remove('hide')
+// }

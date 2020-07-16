@@ -98,21 +98,13 @@
         <script>
             setTimeout(() => {
                 alert('E-mail já cadastrado!')
-            }, 500)
+            }, 200)
         </script>
     {% endif %}
 
-    {% if saved %}
-        <div class="modal">
+        <div class="modal hide">
             <h1>Registro feito com sucesso</h1>
-
-            <script>
-                setTimeout(() => {
-                    window.location = "/home"
-                }, 2000)
-            </script>
         </div>
-    {% endif %}
 
 {% endblock content %}
 

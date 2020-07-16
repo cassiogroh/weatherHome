@@ -71,9 +71,16 @@ if (
      citiesSelect.value != 'Selecione a cidade'
      ) {
         button.disabled = false;
+        button.addEventListener('click', activateModal)
     } else {
         button.disabled = true;
+        button.removeEventListener('click', activateModal)
     }
+}
+
+const modal = document.querySelector('.modal');
+function activateModal() {
+    modal.classList.remove('hide')
 }
 
 // Botão limpar formulário

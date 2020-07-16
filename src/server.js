@@ -71,7 +71,6 @@ const request = async (i, userReq, url, dbData, firstTime) => {
         })
         .catch(err => {
             console.log('Estação offline');
-            // erro_invalid_station = true;
             // console.log(err);
         }
         )
@@ -137,19 +136,15 @@ app.post('/save-point', (req, res) => {
                                 email: req.body.email
                             });
                         }, 4000);
-
-                        // res.render('/registrar', {
-                        //     saved: true
-                        // })
                     })
             })
             .then(trx.commit)
             .catch(trx.rollback)
     })
-    // .catch(err => res.status(400).json('E-mail already registered'));
-    .catch(err => res.render('registrar.html', {
-        erro: true
-    }));
+        // .catch(err => res.status(400).json('E-mail already registered'));
+        .catch(err => res.render('registrar.html', {
+            erro: true
+        }));
 }
 )
 
@@ -169,6 +164,40 @@ const fetchStations = async (user) => {
                 let url = `https://api.weather.com/v2/pws/observations/current?stationId=${data[0].stations[i]}&format=json&units=${info.units}&apiKey=${info.apiKey}&numericPrecision=${info.numericPreicison}`;
                 request(i, userReq, url, data[0], firstTime);
             }
+        })
+}
+
+// Função para verificar se a estação está offline ou não existe
+const verifyStation = async (ID) => {
+    invalidStationId = false;
+    let url = `https://api.weather.com/v2/pws/observations/current?stationId=${ID}&format=json&units=${info.units}&apiKey=${info.apiKey}&numericPrecision=${info.numericPreicison}`;
+    await fetch(url)
+        .then(res => res.json())
+        .catch(err => {
+            invalidStationId = true;
+        })
+}
+
+// Função para excluir a última estação adicionada
+const deleteLastStation = async (email) => {
+    db('users')
+        .where('email', '=', email)
+        .select('*')
+        .then(data => {
+            data[0].stations.pop();
+            data[0].stationname.pop();
+            return [data[0].stations, data[0].stationname]
+        })
+        .then(newData => {
+            db('users')
+                .where('email', '=', email)
+                .update({
+                    stations: newData[0],
+                    stationname: newData[1]
+                })
+                .then(data => {
+                    return invalidStationId = false;
+                })
         })
 }
 
@@ -223,7 +252,7 @@ app.post('/login', (req, res) => {
 app.post('/added', (req, res) => {
     let stationID = req.body.stationID;
     let username = req.body.user;
-    let userEmail = req.body.email
+    let userEmail = req.body.email;
 
     if (stationID == "") {
         res.render('usuario.html', {
@@ -242,19 +271,19 @@ app.post('/added', (req, res) => {
             if (!erro) {
                 for (i = 0; i < data[0].stations.length; i++) {
                     if (data[0].stations[i] == stationID) {
-                            res.render('usuario.html', {
-                                userStations: userStations,
-                                user: username,
-                                email: userEmail,
-                                erro_add: true
-                            })
+                        res.render('usuario.html', {
+                            userStations: userStations,
+                            user: username,
+                            email: userEmail,
+                            erro_add: true
+                        })
                         erro = true;
                         break
                     }
                 }
             }
             if (!erro) {
-                userStations = [];
+                verifyStation(stationID);
                 data[0].stations.push(stationID);
                 data[0].stationname.push(stationID);
                 return [data[0].stations, data[0].stationname]
@@ -263,25 +292,26 @@ app.post('/added', (req, res) => {
         .then(newData => {
             if (!erro) {
                 db('users')
-                .where('email', '=', userEmail)
-                .update({
-                    stations: newData[0],
-                    stationname: newData[1]
-                })
-                .then(user => {
-                    fetchStations(username);
-                    setTimeout(() => {
-                        // if (!erro_invalid_station) {
+                    .where('email', '=', userEmail)
+                    .update({
+                        stations: newData[0],
+                        stationname: newData[1]
+                    })
+                    .then(user => {
+                        userStations = [];
+                        fetchStations(username);
+                        setTimeout(() => {
+                            if (invalidStationId) {
+                                deleteLastStation(userEmail);
+                            }
                             res.render('usuario.html', {
                                 userStations: userStations,
                                 user: username,
                                 email: userEmail,
-                                // erro_invalid_station: true
+                                erro_invalid_station: invalidStationId
                             })
-                        // }
-                    }, 4000)
-                    
-                })
+                        }, 4000)
+                    })
             }
             erro = false;
         })
@@ -297,42 +327,42 @@ app.get('/reload', (req, res) => {
         .select('*')
         .then(data => {
             if (data[0].stations.length > 1) {
-            for (i = 0; i < data[0].stations.length; i++) {
-                if (stationDelete === data[0].stations[i]) {
-                    data[0].stations.splice(i, 1);
-                    data[0].stationname.splice(i, 1);
-                    return [data[0].stations, data[0].stationname];
+                for (i = 0; i < data[0].stations.length; i++) {
+                    if (stationDelete === data[0].stations[i]) {
+                        data[0].stations.splice(i, 1);
+                        data[0].stationname.splice(i, 1);
+                        return [data[0].stations, data[0].stationname];
+                    }
                 }
-            }
-        } else {
+            } else {
                 res.render('usuario.html', {
                     userStations: userStations,
                     user: username,
                     email: userEmail,
                     erro_delete: true
                 })
-            erro = true;
-        }
+                erro = true;
+            }
         })
         .then(newArray => {
             if (!erro) {
-            userStations = [];
-            db('users')
-                .where('email', '=', userEmail)
-                .update({
-                    stations: newArray[0],
-                    stationname: newArray[1]
-                })
-                .then(user => {
-                    fetchStations(username);
-                    setTimeout(() => {
-                        res.render('usuario.html', {
-                            userStations: userStations,
-                            user: username,
-                            email: userEmail
-                        })
-                    }, 4000)
-                })
+                userStations = [];
+                db('users')
+                    .where('email', '=', userEmail)
+                    .update({
+                        stations: newArray[0],
+                        stationname: newArray[1]
+                    })
+                    .then(user => {
+                        fetchStations(username);
+                        setTimeout(() => {
+                            res.render('usuario.html', {
+                                userStations: userStations,
+                                user: username,
+                                email: userEmail
+                            })
+                        }, 4000)
+                    })
             }
             erro = false;
         })
@@ -367,7 +397,7 @@ app.post('/rename', (req, res) => {
         .where('email', '=', userEmail)
         .select('*')
         .then(data => {
-            for (i=0; i < data[0].stationname.length; i++) {
+            for (i = 0; i < data[0].stationname.length; i++) {
                 data[0].stationname[i];
                 if (newName == data[0].stationname[i]) {
                     res.render('usuario.html', {
@@ -390,7 +420,7 @@ app.post('/rename', (req, res) => {
                     } else if (renameStationName == data[0].stationname[i]) {
                         data[0].stationname.splice(i, 1, newName);
                         return data[0].stationname;
-                    } 
+                    }
                 }
             }
         })
@@ -398,25 +428,25 @@ app.post('/rename', (req, res) => {
             userStations = [];
             if (!erro) {
                 db('users')
-                .where('email', '=', userEmail)
-                .select('*')
-                .then(data => {
-                    db('users')
-                        .where('email', '=', userEmail)
-                        .update({
-                            stationname: newArray
-                        })
-                        .then(user => {
-                            fetchStations(username);
-                            setTimeout(() => {
-                                res.render('usuario.html', {
-                                    userStations: userStations,
-                                    user: username,
-                                    email: userEmail
-                                })
-                            }, 4000)
-                        })
-                })
+                    .where('email', '=', userEmail)
+                    .select('*')
+                    .then(data => {
+                        db('users')
+                            .where('email', '=', userEmail)
+                            .update({
+                                stationname: newArray
+                            })
+                            .then(user => {
+                                fetchStations(username);
+                                setTimeout(() => {
+                                    res.render('usuario.html', {
+                                        userStations: userStations,
+                                        user: username,
+                                        email: userEmail
+                                    })
+                                }, 4000)
+                            })
+                    })
             }
             erro = false;
         })
@@ -425,10 +455,6 @@ app.post('/rename', (req, res) => {
 // Rota para exluir conta
 app.get('/excluir-conta', (req, res) => {
     let userEmail = req.query.user;
-
-    // tem certeza?
-    // se não: render 'usuario'
-    // se sim:
 
     db('users')
         .where('email', '=', userEmail)
@@ -439,27 +465,17 @@ app.get('/excluir-conta', (req, res) => {
         .where('email', '=', userEmail)
         .del()
         .then(user => {
-            stations = [];
-            station = {};
-            let userReq = false;
-            for (i = 0; i < length; i++) {
-                let url = `https://api.weather.com/v2/pws/observations/current?stationId=${info.stationsId[i]}&format=json&units=${info.units}&apiKey=${info.apiKey}&numericPrecision=${info.numericPreicison}`;
-                request(i, userReq, url);
-            }
-            setTimeout(() => {
-                res.render('index.html', {
-                    stations: stations
-                })
-            }, 4000);
+            res.render('usuario.html', {
+                userStations: userStations,
+                accDelete: true
+            })
         })
-
 })
 
 // Rota para parcerias
 app.get('/parcerias', (req, res) => {
     res.render('parcerias.html');
 });
-
 
 const PORT = 4000;
 

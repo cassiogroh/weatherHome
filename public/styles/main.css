@@ -15,16 +15,17 @@
     font-family: 'Roboto', sans-serif;
 }
 
-body {
-    width: 80%;
-    max-width: 1100px;
-    height: 100%;
-
-    margin: 0 auto;
-
+html {
+    min-height: 100%;
     background: linear-gradient(var(--bg-color1), var(--bg-color2) );
     background-repeat: no-repeat;
     background-size: cover;
+}
+
+body {
+    width: 80%;
+    max-width: 1100px;
+    margin: 0 auto;
 }
 
 /* Dark mode */
@@ -61,6 +62,11 @@ header .home a p {
     margin: 10px;
     color: black;
     font-size: 20px;
+}
+
+header .home a img {
+    width: 50px;
+    margin: 5px;
 }
 
 header .home a p:hover {
@@ -138,7 +144,9 @@ header .nav-bar a img:hover {
     margin-right: auto;
     margin-left: auto;
     font-weight: bold;
-    transition: 400ms;
+    outline: none;
+    background-color: var(--input-color);
+    transition: transform 400ms;
 }
 
 .login-modal button:hover {
@@ -153,4 +161,22 @@ footer {
     text-align: center;
     margin-bottom: 30px;
     background: linear-gradient(var(--color1), var(--color2));
+}
+
+/* Modais */
+.modal {
+    margin: 0;
+    height: 110%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.95);
+    position: absolute;
+    z-index: 10;
+}
+
+.modal h1 {
+    color: white;
+    text-align: center;
+    margin-top: 10%;
 }

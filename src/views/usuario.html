@@ -12,7 +12,8 @@
     <main>
         <div class="user-head">
             <h1>Bem-vindo {{user}}!</h1>
-            <a href='/excluir-conta?user={{email}}'>Excluir conta</a>
+            {# <a href='/excluir-conta?user={{email}}'>Excluir conta</a> #}
+            <button class='deleteAcc'>Exluir conta</button>
         </div>
 
         <div class="forms">
@@ -25,7 +26,7 @@
                 </div>
 
                 <input type="hidden" name="user" value="{{user}}">
-                <input type="hidden" name="email" value="{{email}}">
+                <input id='email' type="hidden" name="email" value="{{email}}">
             </form>
 
             {% if rename %}
@@ -63,7 +64,7 @@
         <script>
             setTimeout(() => {
                 alert('Esta estação já faz parte da sua coleção')
-            }, 500)
+            }, 200)
         </script>
     {% endif %}
 
@@ -71,15 +72,15 @@
         <script>
             setTimeout(() => {
                 alert('Por favor, insira um ID válido')
-            }, 500)
+            }, 200)
         </script>
     {% endif %}
 
     {% if erro_invalid_station %}
         <script>
             setTimeout(() => {
-                alert('ID inválido ou estação está offline')
-            }, 500)
+                alert('ID inválido ou estação está offline. Não foi possível adicionar a estação ao seu perfil')
+            }, 200)
         </script>
     {% endif %}
 
@@ -87,7 +88,7 @@
         <script>
             setTimeout(() => {
                 alert('Não é possível excluir sua última estação')
-            }, 500)
+            }, 200)
         </script>
     {% endif %}
 
@@ -95,10 +96,23 @@
         <script>
             setTimeout(() => {
                 alert('Já existe uma estação com este nome')
-            }, 500)
+            }, 200)
         </script>
+    {% endif %}
+
+    {% if accDelete %}
+        <div class="modal">
+            <h1>Conta excluída com sucesso</h1>
+
+            <script>
+                setTimeout(() => {
+                    window.location = "/home"
+                }, 2000)
+            </script>
+        </div>
     {% endif %}
 {% endblock content %}
 
 {% block scripts %}
+    <script src="./scripts/usuario.js"></script>
 {% endblock scripts %}

@@ -1,6 +1,6 @@
-body {
+/* body {
     height: 100%;
-}
+} */
 
 fieldset {
     margin-top: 50px;
@@ -82,21 +82,4 @@ form .buttons button h2 {
 .not-match {
     outline-color: red;
     color: red;
-}
-
-/* Modal após registro */
-.modal {
-    margin: 0;
-    height: 110%;
-    width: 100%;
-    top: 0;
-    left: 0;
-    background-color: rgba(0, 0, 0, 0.95);
-    position: absolute;
-}
-
-.modal h1 {
-    color: white;
-    text-align: center;
-    margin-top: 10%;
 }
