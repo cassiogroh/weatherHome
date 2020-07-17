@@ -13,14 +13,18 @@ darkButton.addEventListener('click', darkmode)
 
 let dark = document.cookie[9];
 
+const style = document.documentElement.style;
+
+let variables = getComputedStyle(document.body);
+
 const initialMode = {
-    color1: "#eeee9f",
-    color2: "#f1f1a5",
-    borderShadow: "black",
-    textColor: "black",
-    bgColor1: "#ffe",
-    bgColor2: "#ffc",
-    inputColor: "white"
+    color1: variables.getPropertyValue('--color1'),
+    color2: variables.getPropertyValue('--color2'),
+    borderShadow: variables.getPropertyValue('--border-shadow'),
+    textColor: variables.getPropertyValue('--text-color'),
+    bgColor1: variables.getPropertyValue('--bg-color1'),
+    bgColor2: variables.getPropertyValue('--bg-color2'),
+    inputColor: variables.getPropertyValue('--input-color')
 }
 
 const darkMode = {
@@ -28,12 +32,10 @@ const darkMode = {
     color2: "#222",
     borderShadow: "#888",
     textColor: "#eee",
-    bgColor1: "#222",
+    bgColor1: "#444",
     bgColor2: "#000",
     inputColor: "#aaa"
 }
-
-const style = document.documentElement.style;
 
 const setKey = key => "--" + key.replace(/([A-Z])/, "-$1").toLowerCase();
 

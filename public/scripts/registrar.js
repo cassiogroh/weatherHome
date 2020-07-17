@@ -78,7 +78,7 @@ if (
     }
 }
 
-const modal = document.querySelector('.modal');
+const modal = document.querySelector('.registarModal');
 function activateModal() {
     modal.classList.remove('hide')
 }

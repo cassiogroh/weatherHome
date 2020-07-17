@@ -128,6 +128,7 @@ app.post('/save-point', (req, res) => {
                         stationname: ['Bairro Centro - Brusque']
                     })
                     .then(user => {
+                        let userStations = [];
                         fetchStations(req.body.name);
                         setTimeout(() => {
                             res.render('usuario.html', {

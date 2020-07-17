@@ -1,7 +1,3 @@
-/* body {
-    height: 100%;
-} */
-
 fieldset {
     margin-top: 50px;
     margin-bottom: 20px;
@@ -36,9 +32,12 @@ fieldset h6 {
     flex: 1;
 }
 
-.fieldgroup .field.field {
-    margin-left: 5px;
+.fieldgroup .field {
     margin-bottom: 20px;
+}
+
+.fieldgroup .field+.field {
+    margin-left: 5px;
 }
 
 input, select {
@@ -82,4 +81,34 @@ form .buttons button h2 {
 .not-match {
     outline-color: red;
     color: red;
+}
+
+@media (max-width: 700px) {
+    label {
+        font-size: 15px;
+    }
+    input, select {
+        margin-top: 0;
+        font-size: 15px;
+    }
+    .fieldgroup {
+        display: inline;
+    }
+    .fieldgroup .field {
+        margin-bottom: 10px;
+    }
+    .fieldgroup .field+.field {
+        margin-left: 0px;
+    }
+}
+
+@media (max-width: 510px) {
+    label {
+        font-size: 13px;
+    }
+    input, select {
+        margin-top: 0;
+        font-size: 13px;
+        height: 30px;
+    }
 }

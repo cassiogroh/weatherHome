@@ -1,0 +1,93 @@
+@media (max-width: 700px) {
+    body {
+        width: 90%;
+    }
+    h1 {
+        font-size: 23px;
+    }
+    p, a {
+        font-size: 15px;
+    }
+    header {
+        margin-bottom: 20px;
+    }
+    header .home a img {
+        width: 25px;
+    }
+    header .home a p {
+        font-size: 15px;
+    }
+    header .nav-bar a {
+        font-size: 15px;
+    }
+    header .nav-bar a img {
+        width: 15px;
+    }
+    .card a, p {
+        margin: 0;
+        padding: 2px;
+    }
+    .about p {
+        margin-bottom: 20px;
+    }
+    .login-modal .inputs label {
+        margin-bottom: 1px;
+        font-size: 12px;
+    }
+    .login-modal .inputs {
+        width: 200px;
+    }
+    .login-modal .inputs input {
+        padding-left: 5px;
+        height: 25px;
+        font-size: 13px;
+        margin-bottom: 3px;
+    }
+    .login-modal button {
+        margin-top: 2px;
+        font-size: 12px;
+        padding: 2px;
+    }
+}
+
+@media (max-width: 510px) {
+    body {
+        width: 95%;
+    }
+    h1 {
+        font-size: 17px;
+    }
+    header {
+        margin-bottom: 20px;
+    }
+    header .home a p {
+        margin: 2px;
+        font-size: 13px;
+    }
+    header .nav-bar>a {
+        padding: 2px;
+        font-size: 13px;
+    }
+    header .nav-bar a img {
+        margin-right: 10px;
+    }
+    .card a, p {
+        margin: 0;
+    }
+}
+
+@media (max-width: 300px) {
+    header {
+        margin-bottom: 20px;
+    }
+    header .home a p {
+        font-size: 10px;
+    }
+    header .nav-bar>a {
+        padding: 2px;
+        font-size: 10px;
+    }
+    header .nav-bar a img {
+        margin-right: 5px;
+    }
+}

@@ -43,12 +43,19 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: var(--color1);
+    background-color: var(--color2);
     box-shadow: var(--border-shadow) 2px 2px 7px;
-    margin-top: 10px;
     border-radius: 10px;
 
-    /* position: fixed; */
+    position: sticky;
+    top: 10px;
+    z-index: 2;
+
+    transition: filter 200ms;
+}
+
+header:hover {
+    filter: brightness(1.15);
 }
 
 header .home a {
@@ -60,22 +67,25 @@ header .home a {
 
 header .home a p {
     margin: 10px;
-    color: black;
+    color: var(--text-color);
     font-size: 20px;
 }
 
 header .home a img {
     width: 50px;
     margin: 5px;
+    border-radius: 50%;
+    box-shadow: 0px 0px 7px var(--input-color);
+    background-color: var(--input-color);
 }
 
 header .home a p:hover {
     font-weight: bold;
 }
 
-header .nav-bar>a {
+header .nav-bar a {
     padding: 15px;
-    color: black;
+    color: var(--text-color);
     font-size: 20px;
 }
 
@@ -84,7 +94,10 @@ header .nav-bar>a:hover {
 }
 
 header .nav-bar a img {
-    transition: 400ms;
+    border-radius: 50%;
+    background-color: var(--input-color);
+    box-shadow: 0px 0px 10px white;
+    transition: transform 200ms;
 }
 
 header .nav-bar a img:hover {
@@ -98,12 +111,8 @@ header .nav-bar a img:hover {
 
 .login-modal {
     position: absolute;
-    top: 80px;
-    right: 13rem;
-}
-
-.login-modal h1 {
-    margin: 50px;
+    top: 70px;
+    right: 6%;
 }
 
 .login-modal .inputs {
@@ -126,7 +135,7 @@ header .nav-bar a img:hover {
 .login-modal .inputs input {
     padding-left: 20px;
     height: 30px;
-    border: none;
+    border: 1px dashed black;
     border-radius: 5px;
 }
 
@@ -135,7 +144,7 @@ header .nav-bar a img:hover {
 }
 
 .login-modal button {
-    border: none;
+    border: 1.8px solid black;
     border-radius: 10px;
     cursor: pointer;
     background: white;
@@ -166,11 +175,12 @@ footer {
 /* Modais */
 .modal {
     margin: 0;
-    height: 110%;
+    height: 150%;
     width: 100%;
     top: 0;
     left: 0;
     background-color: rgba(0, 0, 0, 0.95);
+    background-size: ;
     position: absolute;
     z-index: 10;
 }
@@ -178,5 +188,6 @@ footer {
 .modal h1 {
     color: white;
     text-align: center;
-    margin-top: 10%;
+    position: sticky;
+    top: 10%;
 }
