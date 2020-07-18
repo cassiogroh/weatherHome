@@ -26,7 +26,7 @@ app.use(express.urlencoded({ extended: true }));
 const db = require('knex')({
     client: 'pg',
     connection: {
-        connectString: process.env.DATABASE_URL,
+        connectString: 'postgresql-clean-28063',
         ssl: true
     },
 });
