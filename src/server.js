@@ -26,7 +26,7 @@ app.use(express.urlencoded({ extended: true }));
 const db = require('knex')({
     client: 'pg',
     connection: {
-        connectString: process.env.DATABASE_URL,
+        connectionString: process.env.DATABASE_URL,
         ssl: true
     },
 });
@@ -150,12 +150,11 @@ app.post('/save-point', (req, res) => {
             .then(trx.commit)
             .catch(trx.rollback)
     })
-        // .catch(err => res.status(400).json('E-mail already registered'));
         .catch(err => {
-            res.status(400).json(err);
-            // res.render('registrar.html', {
-            //     erro: true
-            // })
+            // res.status(400).json(err);
+            res.render('registrar.html', {
+                erro: true
+            })
         }
             );
 }
