@@ -23,8 +23,6 @@ app.use(express.urlencoded({ extended: true }));
 //     },
 // });
 
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0; 
-
 const db = require('knex')({
     client: 'pg',
     connection: {
@@ -153,9 +151,13 @@ app.post('/save-point', (req, res) => {
             .catch(trx.rollback)
     })
         // .catch(err => res.status(400).json('E-mail already registered'));
-        .catch(err => res.render('registrar.html', {
-            erro: true
-        }));
+        .catch(err => {
+            res.status(400).json(err);
+            // res.render('registrar.html', {
+            //     erro: true
+            // })
+        }
+            );
 }
 )
 
