@@ -33,8 +33,6 @@ const db = require('knex')({
     },
 });
 
-db.connect();
-
 app.set('db', db);
 
 // Instruções da página inicial
