@@ -23,10 +23,12 @@ app.use(express.urlencoded({ extended: true }));
 //     },
 // });
 
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0; 
+
 const db = require('knex')({
     client: 'pg',
     connection: {
-        connectString: 'postgresql-clean-28063',
+        connectString: process.env.DATABASE_URL,
         ssl: true
     },
 });
