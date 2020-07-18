@@ -55,7 +55,7 @@ header {
 }
 
 header:hover {
-    filter: brightness(1.15);
+    filter: brightness(1.10);
 }
 
 header .home a {
