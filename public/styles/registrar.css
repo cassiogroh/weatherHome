@@ -29,11 +29,8 @@ fieldset h6 {
 .fieldgroup .field {
     display: flex;
     flex-direction: column;
-    flex: 1;
-}
-
-.fieldgroup .field {
     margin-bottom: 20px;
+    flex: 1;
 }
 
 .fieldgroup .field+.field {
@@ -49,6 +46,12 @@ input, select {
     -moz-appearance: none;
     appearance: none;
     margin-top: 5px;
+}
+
+input[type=date]::-webkit-calendar-picker-indicator {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    display: none;
 }
 
 form .buttons {

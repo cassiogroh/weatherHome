@@ -13,13 +13,21 @@ nunjucks.configure('src/views', {
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
 
+// const db = require('knex')({
+//     client: 'pg',
+//     connection: {
+//         host: '127.0.0.1',
+//         user: 'postgres',
+//         password: '123',
+//         database: 'weatherHome'
+//     },
+// });
+
 const db = require('knex')({
     client: 'pg',
     connection: {
-        host: '127.0.0.1',
-        user: 'postgres',
-        password: '123',
-        database: 'weatherHome'
+        connectString: process.env.DATABASE_URL,
+        ssl: true
     },
 });
 
@@ -481,3 +489,28 @@ app.get('/parcerias', (req, res) => {
 app.listen(process.env.PORT || 4000, () => {
     console.log(`Server running on port ${process.env.PORT}`);
 });
+
+
+// DATABASE
+
+// CREATE TABLE login
+// (
+//     id serial PRIMARY KEY,
+//     name VARCHAR(100),
+//     birthday date NOT NULL,
+//     email TEXT UNIQUE NOT NULL,
+//     address text,
+//     address2 text,
+//     state text,
+//     city text,
+//     joined timestamp NOT NULL,
+//     stations VARCHAR(200) ARRAY[999] NOT NULL,
+//     stationname VARCHAR(200) ARRAY[999] NOT NULL
+// )
+
+// CREATE TABLE login
+// (
+//     id serial PRIMARY KEY,
+//     email text UNIQUE NOT NULL,
+//     hash VARCHAR(100) NOT NULL
+// )

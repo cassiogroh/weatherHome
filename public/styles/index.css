@@ -53,6 +53,10 @@
     font-weight: bold;
 }
 
+.info a:hover {
+    font-weight: bold;
+}
+
 .forms {
     display: flex;
 }
