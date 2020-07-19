@@ -74,6 +74,9 @@
     .card a, p {
         margin: 0;
     }
+    form .input input {
+        width: 6.5em
+    }
 }
 
 @media (max-width: 300px) {

@@ -15,7 +15,7 @@
         <div class='grid-card'>
             {% for station in stations %}
                 <div class='card'>
-                    <a href={{station.link}}>{{station.local}}</a>
+                    <a href={{station.link}}>{{station.name}}</a>
                     <p>Temperatura: {{station.temp}} °C</p>
                     <p>Chuva acumulada: {{station.rain}} mm</p>
                 </div>

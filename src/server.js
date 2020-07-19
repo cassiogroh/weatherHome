@@ -89,14 +89,16 @@ const request = async (i, userReq, url, dbData, firstTime) => {
 app.get('/', (req, res) => {
     stations = [];
     station = {};
-    let userReq = false;
-    for (i = 0; i < length; i++) {
-        let url = `https://api.weather.com/v2/pws/observations/current?stationId=${info.stationsId[i]}&format=json&units=${info.units}&apiKey=${info.apiKey}&numericPrecision=${info.numericPreicison}`;
-        request(i, userReq, url);
-    }
+    
+    // let userReq = false;
+    // for (i = 0; i < length; i++) {
+    //     let url = `https://api.weather.com/v2/pws/observations/current?stationId=${info.stationsId[i]}&format=json&units=${info.units}&apiKey=${info.apiKey}&numericPrecision=${info.numericPreicison}`;
+    //     request(i, userReq, url);
+    // }
+    fetchStations('Ciro Groh')
     setTimeout(() => {
         res.render('index.html', {
-            stations: stations
+            stations: userStations
         })
     }, 4000);
 })
@@ -104,7 +106,7 @@ app.get('/', (req, res) => {
 // Carregar página inicial sem setTimeout quando clicar no botão home
 app.get('/home', (req, res) => {
     res.render('index.html', {
-        stations: stations
+        stations: userStations
     })
 })
 
@@ -138,7 +140,6 @@ app.post('/save-point', (req, res) => {
                         stationname: ['Bairro Centro - Brusque']
                     })
                     .then(user => {
-                        let userStations = [];
                         fetchStations(req.body.name);
                         setTimeout(() => {
                             res.render('usuario.html', {
@@ -164,6 +165,7 @@ app.post('/save-point', (req, res) => {
 
 // Função para buscar as estações do usuário para rotas /login e /added
 const fetchStations = async (user) => {
+    userStations = [];
     let userReq = true;
     await db('users')
         .where('name', '=', user)
@@ -217,7 +219,6 @@ const deleteLastStation = async (email) => {
 
 // Rota para login
 app.post('/login', (req, res) => {
-    userStations = [];
     const loginEmail = req.body.email;
     const loginPassword = req.body.password;
 
@@ -312,7 +313,6 @@ app.post('/added', (req, res) => {
                         stationname: newData[1]
                     })
                     .then(user => {
-                        userStations = [];
                         fetchStations(username);
                         setTimeout(() => {
                             if (invalidStationId) {
@@ -360,7 +360,6 @@ app.get('/reload', (req, res) => {
         })
         .then(newArray => {
             if (!erro) {
-                userStations = [];
                 db('users')
                     .where('email', '=', userEmail)
                     .update({
@@ -426,7 +425,6 @@ app.post('/rename', (req, res) => {
             }
 
             if (!erro) {
-                console.log('treta')
                 for (i = 0; i < data[0].stationname.length; i++) {
                     if (renameStationID == data[0].stations[i]) {
                         data[0].stationname.splice(i, 1, newName);
@@ -439,7 +437,6 @@ app.post('/rename', (req, res) => {
             }
         })
         .then(newArray => {
-            userStations = [];
             if (!erro) {
                 db('users')
                     .where('email', '=', userEmail)

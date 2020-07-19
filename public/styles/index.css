@@ -64,14 +64,16 @@
 form {
     display: flex;
     flex-direction: column;
+    justify-content: center;
     text-align: center;
-    width: 200px;
+    width: fit-content;
     margin-bottom: 20px;
     margin-right: 15px;
 }
 
 form .input {
     display: flex;
+    justify-content: center;
 }
 
 form input {
@@ -82,6 +84,7 @@ form input {
     border: 2px solid var(--border-shadow);
     border-right: none;
     outline: none;
+    width: 10em
 }
 
 form button {
@@ -124,6 +127,10 @@ form button img:hover {
 
 .cardhead>a:hover{
     transform: scale(1.05);
+}
+
+.card p {
+    margin: 10px 0;
 }
 
 .card .bottom {
