@@ -133,6 +133,7 @@ header .nav-bar a img:hover {
 }
 
 .login-modal .inputs input {
+    width: 225px;
     padding-left: 20px;
     height: 30px;
     border: 1px dashed black;

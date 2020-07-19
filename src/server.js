@@ -13,32 +13,32 @@ nunjucks.configure('src/views', {
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
 
-// const db = require('knex')({
-//     client: 'pg',
-//     connection: {
-//         host: '127.0.0.1',
-//         user: 'postgres',
-//         password: '123',
-//         database: 'weatherHome'
-//     },
-// });
-
 const db = require('knex')({
     client: 'pg',
     connection: {
-        connectionString: process.env.DATABASE_URL,
-        ssl: {
-            rejectUnauthorized: false
-          }
+        host: '127.0.0.1',
+        user: 'postgres',
+        password: '123',
+        database: 'weatherHome'
     },
 });
+
+// const db = require('knex')({
+//     client: 'pg',
+//     connection: {
+//         connectionString: process.env.DATABASE_URL,
+//         ssl: {
+//             rejectUnauthorized: false
+//           }
+//     },
+// });
 
 app.set('db', db);
 
 // Instruções da página inicial
 const length = info.stationsId.length;
 let userStations = [];
-let stations = [];
+let mainStations = [];
 let station = {};
 let erro = false;
 
@@ -76,7 +76,7 @@ const request = async (i, userReq, url, dbData, firstTime) => {
                     station['est' + i].name = dbData.stationname[i];
                 }
 
-                userStations.push(station['est' + i]);
+                mainUser ? mainStations.push(station['est' + i]) : userStations.push(station['est' + i]);
             }
         })
         .catch(err => {
@@ -89,16 +89,18 @@ const request = async (i, userReq, url, dbData, firstTime) => {
 app.get('/', (req, res) => {
     stations = [];
     station = {};
+    mainStations = [];
+    mainUser = true;
     
     // let userReq = false;
     // for (i = 0; i < length; i++) {
     //     let url = `https://api.weather.com/v2/pws/observations/current?stationId=${info.stationsId[i]}&format=json&units=${info.units}&apiKey=${info.apiKey}&numericPrecision=${info.numericPreicison}`;
     //     request(i, userReq, url);
     // }
-    fetchStations('Ciro Groh')
+    fetchStations('Cassio Groh')
     setTimeout(() => {
         res.render('index.html', {
-            stations: userStations
+            stations: mainStations
         })
     }, 4000);
 })
@@ -106,7 +108,7 @@ app.get('/', (req, res) => {
 // Carregar página inicial sem setTimeout quando clicar no botão home
 app.get('/home', (req, res) => {
     res.render('index.html', {
-        stations: userStations
+        stations: mainStations
     })
 })
 
@@ -219,6 +221,7 @@ const deleteLastStation = async (email) => {
 
 // Rota para login
 app.post('/login', (req, res) => {
+    mainUser = false;
     const loginEmail = req.body.email;
     const loginPassword = req.body.password;
 

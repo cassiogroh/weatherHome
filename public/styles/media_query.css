@@ -38,6 +38,7 @@
         width: 200px;
     }
     .login-modal .inputs input {
+        width: 170px;
         padding-left: 5px;
         height: 25px;
         font-size: 13px;
