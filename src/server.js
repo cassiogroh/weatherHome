@@ -13,25 +13,25 @@ nunjucks.configure('src/views', {
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
 
-const db = require('knex')({
-    client: 'pg',
-    connection: {
-        host: '127.0.0.1',
-        user: 'postgres',
-        password: '123',
-        database: 'weatherHome'
-    },
-});
-
 // const db = require('knex')({
 //     client: 'pg',
 //     connection: {
-//         connectionString: process.env.DATABASE_URL,
-//         ssl: {
-//             rejectUnauthorized: false
-//           }
+//         host: '127.0.0.1',
+//         user: 'postgres',
+//         password: '123',
+//         database: 'weatherHome'
 //     },
 // });
+
+const db = require('knex')({
+    client: 'pg',
+    connection: {
+        connectionString: process.env.DATABASE_URL,
+        ssl: {
+            rejectUnauthorized: false
+          }
+    },
+});
 
 app.set('db', db);
 
@@ -97,7 +97,7 @@ app.get('/', (req, res) => {
     //     let url = `https://api.weather.com/v2/pws/observations/current?stationId=${info.stationsId[i]}&format=json&units=${info.units}&apiKey=${info.apiKey}&numericPrecision=${info.numericPreicison}`;
     //     request(i, userReq, url);
     // }
-    fetchStations('Cassio Groh')
+    fetchStations('Ciro Groh')
     setTimeout(() => {
         res.render('index.html', {
             stations: mainStations
