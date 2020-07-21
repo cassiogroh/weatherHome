@@ -13,25 +13,25 @@ nunjucks.configure('src/views', {
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
 
-const db = require('knex')({
-    client: 'pg',
-    connection: {
-        host: '127.0.0.1',
-        user: 'postgres',
-        password: '123',
-        database: 'weatherHome'
-    },
-});
-
 // const db = require('knex')({
 //     client: 'pg',
 //     connection: {
-//         connectionString: process.env.DATABASE_URL,
-//         ssl: {
-//             rejectUnauthorized: false
-//           }
+//         host: '127.0.0.1',
+//         user: 'postgres',
+//         password: '123',
+//         database: 'weatherHome'
 //     },
 // });
+
+const db = require('knex')({
+    client: 'pg',
+    connection: {
+        connectionString: process.env.DATABASE_URL,
+        ssl: {
+            rejectUnauthorized: false
+          }
+    },
+});
 
 app.set('db', db);
 
