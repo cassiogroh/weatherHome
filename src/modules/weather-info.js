@@ -35,13 +35,13 @@ module.exports = {
 }
 
 // Available info
-// dewpt: 6.3
-// elev: 33.2
-// heatIndex: 18.1
-// precipRate: 0
-// precipTotal: 0
-// pressure: 1007.11
-// temp: 18.1
-// windChill: 18.1
-// windGust: 41.4
-// windSpeed: 8.7
+// dewpt
+// elev
+// heatIndex
+// precipRate
+// precipTotal
+// pressure
+// temp
+// windChill
+// windGust
+// windSpeed

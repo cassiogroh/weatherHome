@@ -4,6 +4,7 @@ const main = document.querySelector('main');
 
 loginButton.addEventListener('click', toggleModal);
 main.addEventListener('click', toggleModalOff);
+// loginModal.addEventListener('focusout', toggleModalOff)
 
 function toggleModal() {
     loginModal.classList.toggle('hide');

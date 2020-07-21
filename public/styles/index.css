@@ -1,3 +1,29 @@
+main .main-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sync-time {
+    margin: 0;
+}
+
+main #options-menu {
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    background: linear-gradient(var(--color1), var(--color2));
+    margin: 10px;
+    outline: none;
+    font-weight: bold;
+    padding: 5px;
+    transition: transform 400ms;
+}
+
+main #options-menu:hover {
+    transform: scale(1.03);
+}
+
 .grid-card {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -35,13 +61,7 @@
 
 /* Página de usuário */
 
-.user-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.user-head button {
+.main-head button {
     color: var(--text-color);
     border: none;
     cursor: pointer;
@@ -57,11 +77,11 @@
     font-weight: bold;
 }
 
-.forms {
+.head-forms {
     display: flex;
 }
 
-form {
+.head-forms form {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -71,12 +91,12 @@ form {
     margin-right: 15px;
 }
 
-form .input {
+.head-forms form .input {
     display: flex;
     justify-content: center;
 }
 
-form input {
+.head-forms form input {
     padding-left: 5px;
     height: 40px;
     border-top-left-radius: 10px;
@@ -87,7 +107,7 @@ form input {
     width: 10em
 }
 
-form button {
+.head-forms form button {
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
     border: 2px solid var(--border-shadow);
@@ -98,14 +118,14 @@ form button {
     outline: none;
 }
 
-form button img {
+.head-forms form button img {
     height: 25px;
     margin: 0;
     padding: 0;
     transition: 100ms;
 }
 
-form button img:hover {
+.head-forms form button img:hover {
     filter: brightness(105%);
     transform: scale(1.05);
 }
@@ -150,4 +170,27 @@ form button img:hover {
 
 .card .bottom h6 {
     margin:0;
+}
+
+.options-card {
+    width: fit-content;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    border: 3px var(--border-shadow) solid;
+    border-radius: 10px;
+    background: var(--bg-color2);
+    position: absolute;
+    top: 180px;
+    left: 16%;
+    z-index: 2;
+    transition: transform 400ms;
+}
+
+.options-card:hover {
+    transform: scale(1.05);
+}
+
+.hide {
+    display: none;
 }

@@ -10,14 +10,17 @@
 
 {% block content %}
     <main>
-        <div class="user-head">
+        <div class="main-head">
             <h1>Bem-vindo {{user}}!</h1>
-            {# <a href='/excluir-conta?user={{email}}'>Excluir conta</a> #}
             <button class='deleteAcc'>Exluir conta</button>
         </div>
+        <h5 class='sync-time'></h5>
+
         <p class='info'>Encontre ID's para mais estações <a href="https://www.wunderground.com/dashboard/pws/ISANTACA56" style='text-decoration: underline'>aqui</a>.</p>
 
-        <div class="forms">
+        <button id='options-menu'>Opções de visualização</button>
+
+        <div class="head-forms">
             <form action="/added" id='added' method='POST'>
                 <label for="stationID">Adicione um ID</label>
 
@@ -43,6 +46,9 @@
                 </form>
             {% endif %}
         </div>
+
+        {% include './partials/options-card.html'%}
+
         <div class='grid-card'>
             {% for station in userStations %}
                 <div class='card'>
@@ -50,8 +56,16 @@
                         <a href={{station.link}}>{{station.name}}</a>
                         <a href="/reload?user={{user}}&email={{email}}&delete={{station.id}}"><img src="./assets/close.svg" alt="Deletar estação"></a>
                     </div>
-                    <p>Temperatura: {{station.temp}} °C</p>
-                    <p>Chuva acumulada: {{station.rain}} mm</p>
+                    <p class='dewpt hide'>{{station.dewpt}}</p>
+                    <p class='elev hide'>{{station.elev}}</p>
+                    <p class="heatIndex hide">{{station.heatIndex}}</p>
+                    <p class="precipRate hide">{{station.precipRate}}</p>
+                    <p class="precipTotal">{{station.precipTotal}}</p>
+                    <p class="pressure hide" hide>{{station.pressure}}</p>
+                    <p class='temp'>{{station.temp}}</p>
+                    <p class="windChill hide">{{station.windChill}}</p>
+                    <p class="windGust hide">{{station.windGust}}</p>
+                    <p class="windSpeed">{{station.windSpeed}}</p>
                     <div class="bottom">
                         <h6>{{station.id}}</h6>
                         <a href="/renomear?stationID={{station.id}}&stationName={{station.name}}&email={{email}}&user={{user}}"><img src="./assets/edit.svg" alt="Renomear estação"></a>
@@ -116,4 +130,5 @@
 
 {% block scripts %}
     <script src="./scripts/usuario.js"></script>
+    <script src="./scripts/index.js"></script>
 {% endblock scripts %}

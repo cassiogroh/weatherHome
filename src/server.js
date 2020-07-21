@@ -13,25 +13,25 @@ nunjucks.configure('src/views', {
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
 
-// const db = require('knex')({
-//     client: 'pg',
-//     connection: {
-//         host: '127.0.0.1',
-//         user: 'postgres',
-//         password: '123',
-//         database: 'weatherHome'
-//     },
-// });
-
 const db = require('knex')({
     client: 'pg',
     connection: {
-        connectionString: process.env.DATABASE_URL,
-        ssl: {
-            rejectUnauthorized: false
-          }
+        host: '127.0.0.1',
+        user: 'postgres',
+        password: '123',
+        database: 'weatherHome'
     },
 });
+
+// const db = require('knex')({
+//     client: 'pg',
+//     connection: {
+//         connectionString: process.env.DATABASE_URL,
+//         ssl: {
+//             rejectUnauthorized: false
+//           }
+//     },
+// });
 
 app.set('db', db);
 
@@ -51,17 +51,22 @@ const request = async (i, userReq, url, dbData, firstTime) => {
     await fetch(url)
         .then(async res => await res.json())
         .then(async res => {
-            data = res.observations[0];
-
-            let local = data.neighborhood;
-            let temp = data.metric.temp;
-            let rain = data.metric.precipTotal;
+            data = res.observations[0].metric;
+            dataLocal = res.observations[0].neighborhood;
 
             station['est' + i] = new Object();
-            station['est' + i].local = local;
-            station['est' + i].temp = temp;
-            station['est' + i].rain = rain;
-
+            station['est' + i].local = dataLocal;
+            station['est' + i].dewpt = `Ponto de orvalho: ${data.dewpt} °C`;
+            station['est' + i].elev = `Elevação: ${data.elev} m`;
+            station['est' + i].heatIndex = `Índice de calor: ${data.heatIndex} °C`;
+            station['est' + i].precipRate = `Taxa de precip.: ${data.precipRate} mm/h`;
+            station['est' + i].precipTotal = `Precip. total: ${data.precipTotal} mm`;
+            station['est' + i].pressure = `Pressão atm.: ${data.pressure} hPa`;
+            station['est' + i].temp = `Temperatura: ${data.temp} °C`;
+            station['est' + i].windChill = `Sensação térmica: ${data.windChill} °C`;
+            station['est' + i].windGust = `Rajada: ${data.windGust} km/h`;
+            station['est' + i].windSpeed = `Vel. do vento: ${data.windSpeed} km/h`;
+            
             if (userReq == false) {
                 station['est' + i].link = 'https://www.wunderground.com/dashboard/pws/' + info.stationsId[i];
                 station['est' + i].id = info.stationsId[i];
@@ -71,7 +76,7 @@ const request = async (i, userReq, url, dbData, firstTime) => {
                 station['est' + i].id = dbData.stations[i];
 
                 if (firstTime) {
-                    station['est' + i].name = local;
+                    station['est' + i].name = dataLocal;
                 } else {
                     station['est' + i].name = dbData.stationname[i];
                 }
@@ -491,7 +496,7 @@ app.get('/parcerias', (req, res) => {
     res.render('parcerias.html');
 });
 
-app.listen(process.env.PORT || 4000, () => {
+app.listen(process.env.PORT || 3000, () => {
     console.log(`Server running on port ${process.env.PORT}`);
 });
 
