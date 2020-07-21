@@ -9,9 +9,9 @@
     "heroku": "^7.42.4",
     "knex": "^0.21.1",
     "node-fetch": "^2.6.0",
+    "nodemon": "^2.0.4",
     "nunjucks": "^3.2.1",
-    "pg": "^8.2.1",
-    "nodemon": "^2.0.4"
+    "pg": "^8.2.1"
   },
   "scripts": {
     "start": "nodemon src/server.js"
