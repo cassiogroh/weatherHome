@@ -13,26 +13,27 @@ nunjucks.configure('src/views', {
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
 
-// const db = require('knex')({
-//     client: 'pg',
-//     connection: {
-//         host: '127.0.0.1',
-//         user: 'postgres',
-//         password: '123',
-//         database: 'weatherHome'
-//     },
-// });
-
-const db = require('knex')({
-    client: 'pg',
-    connection: {
-        connectionString: process.env.DATABASE_URL,
-        ssl: {
-            rejectUnauthorized: false
-          }
-    },
-});
-
+if (process.env.PORT == undefined) {
+    db = require('knex')({
+        client: 'pg',
+        connection: {
+            host: '127.0.0.1',
+            user: 'postgres',
+            password: '123',
+            database: 'weatherHome'
+        },
+    });
+} else {
+    db = require('knex')({
+        client: 'pg',
+        connection: {
+            connectionString: process.env.DATABASE_URL,
+            ssl: {
+                rejectUnauthorized: false
+            }
+        },
+    });
+}
 app.set('db', db);
 
 // Instruções da página inicial
@@ -66,7 +67,7 @@ const request = async (i, userReq, url, dbData, firstTime) => {
             station['est' + i].windChill = `Sensação térmica: ${data.windChill} °C`;
             station['est' + i].windGust = `Rajada: ${data.windGust} km/h`;
             station['est' + i].windSpeed = `Vel. do vento: ${data.windSpeed} km/h`;
-            
+
             if (userReq == false) {
                 station['est' + i].link = 'https://www.wunderground.com/dashboard/pws/' + info.stationsId[i];
                 station['est' + i].id = info.stationsId[i];
@@ -96,7 +97,7 @@ app.get('/', (req, res) => {
     station = {};
     mainStations = [];
     mainUser = true;
-    
+
     // let userReq = false;
     // for (i = 0; i < length; i++) {
     //     let url = `https://api.weather.com/v2/pws/observations/current?stationId=${info.stationsId[i]}&format=json&units=${info.units}&apiKey=${info.apiKey}&numericPrecision=${info.numericPreicison}`;
@@ -166,7 +167,7 @@ app.post('/save-point', (req, res) => {
                 erro: true
             })
         }
-            );
+        );
 }
 )
 

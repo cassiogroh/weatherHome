@@ -10,6 +10,10 @@
 
 {% block content %}
     <main>
+        <div id='options-menu'>
+            {% include './partials/options-card.html'%}
+        </div>
+
         <div class="main-head">
             <h1>Bem-vindo {{user}}!</h1>
             <button class='deleteAcc'>Exluir conta</button>
@@ -17,8 +21,6 @@
         <h5 class='sync-time'></h5>
 
         <p class='info'>Encontre ID's para mais estações <a href="https://www.wunderground.com/dashboard/pws/ISANTACA56" style='text-decoration: underline'>aqui</a>.</p>
-
-        <button id='options-menu'>Opções de visualização</button>
 
         <div class="head-forms">
             <form action="/added" id='added' method='POST'>
@@ -46,8 +48,6 @@
                 </form>
             {% endif %}
         </div>
-
-        {% include './partials/options-card.html'%}
 
         <div class='grid-card'>
             {% for station in userStations %}

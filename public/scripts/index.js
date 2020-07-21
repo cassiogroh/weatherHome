@@ -39,12 +39,12 @@ const optionsButton = document.querySelector('#options-menu');
 const optionsCard = document.querySelector('.options-card');
 
 optionsButton.addEventListener('mouseenter', removeHideOptions);
-optionsCard.addEventListener('mouseleave', toggleHideOptions)
+optionsButton.addEventListener('mouseleave', addHideOptions)
 
-function toggleHideOptions() {
-    optionsCard.classList.toggle('hide');
+function addHideOptions() {
+    optionsCard.classList.add('collapse');
 }
 
 function removeHideOptions() {
-    optionsCard.classList.remove('hide');
+    optionsCard.classList.remove('collapse');
 }

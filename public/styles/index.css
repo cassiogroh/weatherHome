@@ -1,4 +1,5 @@
 main .main-head {
+    margin-top: 30px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -9,19 +10,50 @@ main .main-head {
 }
 
 main #options-menu {
+    width: fit-content;
     border: none;
     border-radius: 10px;
-    cursor: pointer;
     background: linear-gradient(var(--color1), var(--color2));
-    margin: 10px;
     outline: none;
     font-weight: bold;
     padding: 5px;
+    color: var(--text-color);
+    transform: scale(0.9);
     transition: transform 400ms;
+    position: absolute;
+    z-index: 2;
+    top: 80px;
 }
 
 main #options-menu:hover {
-    transform: scale(1.03);
+    transform: scale(1);
+}
+
+.options-card.collapse {
+    max-height: 0px;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+}
+
+.options-card p {
+    margin-top: 0;
+}
+
+.options-card {
+    padding: 0px 10px 21px 10px;
+    height: auto;
+    max-height: 300px;
+    transition: max-height 0.1s ease-out;
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    border: 3px var(--border-shadow) solid;
+    border-radius: 10px;
+    background: var(--bg-color2);
+}
+
+.hide {
+    display: none;
 }
 
 .grid-card {
@@ -42,7 +74,7 @@ main #options-menu:hover {
     flex-direction: column;
     justify-content: space-between;
 
-    transition: filter, transform 200ms;
+    transition: filter 200ms, transform 200ms;
 }
 
 .grid-card .card:hover {
@@ -61,7 +93,11 @@ main #options-menu:hover {
 
 /* Página de usuário */
 
-.main-head button {
+.main-head {
+    margin-top: 0;
+}
+
+.main-head .deleteAcc {
     color: var(--text-color);
     border: none;
     cursor: pointer;
@@ -69,7 +105,7 @@ main #options-menu:hover {
     outline: none;
 }
 
-.user-head button:hover {
+.deleteAcc:hover {
     font-weight: bold;
 }
 
@@ -150,7 +186,7 @@ main #options-menu:hover {
 }
 
 .card p {
-    margin: 10px 0;
+    margin: 2px 0;
 }
 
 .card .bottom {
@@ -170,27 +206,4 @@ main #options-menu:hover {
 
 .card .bottom h6 {
     margin:0;
-}
-
-.options-card {
-    width: fit-content;
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-    border: 3px var(--border-shadow) solid;
-    border-radius: 10px;
-    background: var(--bg-color2);
-    position: absolute;
-    top: 180px;
-    left: 16%;
-    z-index: 2;
-    transition: transform 400ms;
-}
-
-.options-card:hover {
-    transform: scale(1.05);
-}
-
-.hide {
-    display: none;
 }

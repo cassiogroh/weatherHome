@@ -14,24 +14,26 @@
             <h1>Estações meteorológicas de Ciro Groh</h1>
             <h5 class='sync-time'></h5>
         </div>
-        <button id='options-menu'>Opções de visualização</button>
+        <div id='options-menu'>
+            {% include './partials/options-card.html'%}
+        </div>
 
-        {% include './partials/options-card.html'%}
+        
 
         <div class='grid-card'>
             {% for station in stations %}
                 <div class='card'>
                     <a href={{station.link}}>{{station.name}}</a>
+                    <p class='temp'>{{station.temp}}</p>
+                    <p class="precipTotal">{{station.precipTotal}}</p>
+                    <p class="windSpeed">{{station.windSpeed}}</p>
                     <p class='dewpt hide'>{{station.dewpt}}</p>
                     <p class='elev hide'>{{station.elev}}</p>
                     <p class="heatIndex hide">{{station.heatIndex}}</p>
                     <p class="precipRate hide">{{station.precipRate}}</p>
-                    <p class="precipTotal">{{station.precipTotal}}</p>
                     <p class="pressure hide" hide>{{station.pressure}}</p>
-                    <p class='temp'>{{station.temp}}</p>
                     <p class="windChill hide">{{station.windChill}}</p>
                     <p class="windGust hide">{{station.windGust}}</p>
-                    <p class="windSpeed">{{station.windSpeed}}</p>
                 </div>
 
             {% endfor %}
