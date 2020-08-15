@@ -1,7 +1,7 @@
 # Web app built to show weather conditions in any chosen place 
 <br/>
 
-*You can check this website out [here](https://weatherhome.herokuapp.com/)
+* You can check this website out [here](https://weatherhome.herokuapp.com/)
 
 * Register to start selecting your weather stations across the world hosted on [Weather Underground](https://www.wunderground.com); <br/>
 * Enable dark mode on the top right corner to keep your eyes safe when in a dark room; <br/>
