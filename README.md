@@ -1,6 +1,6 @@
 <h1 align="center">
+  <img alt="Logo" src="./public/webView/logo.png" width="50px"> </br>
   WeatherHome
-  <img alt="Logo" src="./public/webView/logo.png" width="50px">
 </h1>
 
 <h3 align="center">
