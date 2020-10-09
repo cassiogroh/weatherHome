@@ -1,10 +1,10 @@
 <h1 align="center">
-  <img alt="Logo" src="./public/webView/logo.png" width="100px">
+  <img alt="Logo" src="./public/webView/logo.png" width="50px">
 </h1>
 
 <h3 align="center">
   Web application to check weather conditions </br>
-  New, better, faster, prettier app made with React [here](https://github.com/cassiogroh/WeatherHub)
+  New, better, faster, prettier app made with React <a src='https://github.com/cassiogroh/WeatherHub'>here</a>
 </h3>
 
 <p align="center">Easy way to view weather conditions on any given place!</p>
