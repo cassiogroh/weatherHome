@@ -3,8 +3,9 @@
 </h1>
 
 <h3 align="center">
+  WeatherHome </br>
   Web application to check weather conditions </br>
-  New, better, faster, prettier app made with React <a src='https://github.com/cassiogroh/WeatherHub'>here</a>
+  New, better, faster, prettier app made with React <a href='https://github.com/cassiogroh/WeatherHub'>here</a>
 </h3>
 
 <p align="center">Easy way to view weather conditions on any given place!</p>
