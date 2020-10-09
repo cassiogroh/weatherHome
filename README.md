@@ -39,7 +39,7 @@
 </p>
 
 <p align="center">
-  <img alt="WeatherHome" src="./public/webView/mockup.png" width="70%">
+  <img alt="WeatherHome" src="./public/webView/mockupView.png" width="70%">
 </p>
 
 ## 💇🏻‍♂️ About the project
